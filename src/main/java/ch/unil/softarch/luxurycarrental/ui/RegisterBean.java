@@ -1,0 +1,4 @@
+package ch.unil.softarch.luxurycarrental.ui;
+
+public class RegisterBean {
+}
