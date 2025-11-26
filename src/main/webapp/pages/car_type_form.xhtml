@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="en">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Add / Edit Car Type</title>
+</h:head>
+
+<h:body>
+    <h:form id="carTypeForm">
+
+        <h2>Add / Edit Car Type</h2>
+
+        <!-- Car Type Panel Grid -->
+        <p:panelGrid columns="2" columnClasses="label,value" cellpadding="5">
+
+            <h:outputLabel for="brand" value="Brand:"/>
+            <h:inputText id="brand" value="#{carTypeBean.brand}" required="true"/>
+
+            <h:outputLabel for="model" value="Model:"/>
+            <h:inputText id="model" value="#{carTypeBean.model}" required="true"/>
+
+            <h:outputLabel for="category" value="Category:"/>
+            <h:inputText id="category" value="#{carTypeBean.category}"/>
+
+            <h:outputLabel for="engine" value="Engine:"/>
+            <h:inputText id="engine" value="#{carTypeBean.engine}"/>
+
+            <h:outputLabel for="power" value="Power (HP):"/>
+            <h:inputText id="power" value="#{carTypeBean.power}"/>
+
+            <h:outputLabel for="maxSpeed" value="Max Speed:"/>
+            <h:inputText id="maxSpeed" value="#{carTypeBean.maxSpeed}"/>
+
+            <h:outputLabel for="weight" value="Weight (kg):"/>
+            <h:inputText id="weight" value="#{carTypeBean.weight}"/>
+
+            <h:outputLabel for="acceleration" value="Acceleration (0–100 km/h):"/>
+            <h:inputText id="acceleration" value="#{carTypeBean.acceleration}"/>
+
+            <h:outputLabel for="seats" value="Seats:"/>
+            <h:inputText id="seats" value="#{carTypeBean.seats}"/>
+
+            <h:outputLabel for="transmission" value="Transmission:"/>
+            <p:selectOneMenu id="transmission" value="#{carTypeBean.transmission}">
+                <f:selectItem itemValue="AUTOMATIC" itemLabel="Automatic"/>
+                <f:selectItem itemValue="MANUAL" itemLabel="Manual"/>
+            </p:selectOneMenu>
+
+            <h:outputLabel for="driveType" value="Drive Type:"/>
+            <p:selectOneMenu id="driveType" value="#{carTypeBean.driveType}">
+                <f:selectItem itemValue="FRONT_WHEEL_DRIVE" itemLabel="Front Wheel Drive"/>
+                <f:selectItem itemValue="REAR_WHEEL_DRIVE" itemLabel="Rear Wheel Drive"/>
+                <f:selectItem itemValue="ALL_WHEEL_DRIVE" itemLabel="All Wheel Drive"/>
+            </p:selectOneMenu>
+
+            <h:outputLabel for="description" value="Description:"/>
+            <h:inputTextarea id="description" value="#{carTypeBean.description}" rows="4"/>
+
+            <h:outputLabel for="features" value="Features:"/>
+            <p:selectManyCheckbox id="features" value="#{carTypeBean.features}" layout="grid" columns="2">
+                <f:selectItem itemValue="Air Conditioning" itemLabel="Air Conditioning"/>
+                <f:selectItem itemValue="Bluetooth" itemLabel="Bluetooth"/>
+                <f:selectItem itemValue="Parking Sensor" itemLabel="Parking Sensors"/>
+                <f:selectItem itemValue="Navigation" itemLabel="Navigation System"/>
+            </p:selectManyCheckbox>
+
+        </p:panelGrid>
+
+        <br/>
+
+        <!-- Submit button -->
+        <p:commandButton value="Save Car Type"
+                         action="#{carTypeBean.save}"
+                         update="@form"
+                         icon="pi pi-check"/>
+
+        <p:messages id="messages" autoUpdate="true" showDetail="true"/>
+
+    </h:form>
+</h:body>
+</html>

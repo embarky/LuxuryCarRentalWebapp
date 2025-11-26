@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="en">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Customers</title>
+    <h:outputStylesheet name="css/page-style.css"/>
+</h:head>
+
+<h:body>
+    <div class="page-container">
+        <div class="content-header">
+            <h1 class="page-title">Customers</h1>
+            <p class="page-subtitle">Manage customer accounts</p>
+        </div>
+
+        <div class="content-body">
+            <div class="welcome-message">
+                <h2>Customer Management</h2>
+                <p>View and manage customer accounts and information.</p>
+            </div>
+
+            <!-- Customer Table -->
+            <h:dataTable value="#{customerBean.allCustomers}" var="customer" border="1" styleClass="customer-table">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                    #{customer.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Name</f:facet>
+                    #{customer.name}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Email</f:facet>
+                    #{customer.email}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Phone</f:facet>
+                    #{customer.phone}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                    #{customer.status}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:link value="Details" outcome="/pages/admin/customer_detail.xhtml">
+                        <f:param name="customerId" value="#{customer.id}"/>
+                    </h:link>
+                </h:column>
+            </h:dataTable>
+        </div>
+    </div>
+</h:body>
+</html>

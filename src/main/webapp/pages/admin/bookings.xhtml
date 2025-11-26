@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="en">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>All Bookings</title>
+    <h:outputStylesheet name="css/page-style.css"/>
+</h:head>
+
+<h:body>
+    <div class="page-container">
+        <div class="content-header">
+            <h1 class="page-title">All Bookings</h1>
+            <p class="page-subtitle">View and manage all bookings</p>
+        </div>
+
+        <div class="content-body">
+            <div class="welcome-message">
+                <h2>All Bookings</h2>
+                <p>View and manage all customer bookings.</p>
+            </div>
+
+            <!-- 示例：可以用 JSF 数据表显示订单列表 -->
+            <h:dataTable value="#{bookingBean.allBookings}" var="booking" border="1" styleClass="booking-table">
+                <h:column>
+                    <f:facet name="header">Booking ID</f:facet>
+                    #{booking.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Customer</f:facet>
+                    #{booking.customerName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Car</f:facet>
+                    #{booking.car.model}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Start Date</f:facet>
+                    #{booking.startDate}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">End Date</f:facet>
+                    #{booking.endDate}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                    #{booking.bookingStatus}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:link value="Details" outcome="/pages/admin/booking_detail.xhtml">
+                        <f:param name="bookingId" value="#{booking.id}"/>
+                    </h:link>
+                </h:column>
+            </h:dataTable>
+        </div>
+    </div>
+</h:body>
+</html>

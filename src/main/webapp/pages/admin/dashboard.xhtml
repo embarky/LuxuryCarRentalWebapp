@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="en">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard</title>
+    <h:outputStylesheet name="css/admin-style.css"/>
+</h:head>
+
+<h:body>
+    <div class="page-container">
+        <div class="content-header">
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Welcome to the admin dashboard</p>
+        </div>
+
+        <div class="content-body">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-title">Total Vehicles</div>
+                    <div class="stat-value">#{dashboardBean.totalVehicles}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Active Bookings</div>
+                    <div class="stat-value">#{dashboardBean.activeBookings}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Total Customers</div>
+                    <div class="stat-value">#{dashboardBean.totalCustomers}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Monthly Revenue</div>
+                    <div class="stat-value">$#{dashboardBean.monthlyRevenue}</div>
+                </div>
+            </div>
+
+            <div class="welcome-message">
+                <h2>Welcome to Car Rental Admin Dashboard</h2>
+                <p>Manage your car rental business efficiently. Use the sidebar to navigate through different sections.</p>
+            </div>
+        </div>
+    </div>
+</h:body>
+</html>

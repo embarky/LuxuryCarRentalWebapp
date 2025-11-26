@@ -1,6 +1,7 @@
 package ch.unil.softarch.luxurycarrental.client;
 
 import ch.unil.softarch.luxurycarrental.domain.entities.Admin;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -9,11 +10,14 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class AdminClient {
+@ApplicationScoped
+public class AdminClient implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private static final String BASE_URL = "http://localhost:8080/LuxuryCarRental/api/admins";
     private final Client client;
@@ -89,5 +93,24 @@ public class AdminClient {
                 .path("reset-password")
                 .request(MediaType.APPLICATION_JSON)
                 .put(Entity.entity(body, MediaType.APPLICATION_JSON), new GenericType<Map<String, String>>() {});
+    }
+
+    public Admin authenticate(String username, String password) {
+        try {
+            var json = """
+                {
+                    "username": "%s",
+                    "password": "%s"
+                }
+            """.formatted(username, password);
+
+            return client.target(BASE_URL + "/login")
+                    .request(MediaType.APPLICATION_JSON)
+                    .post(Entity.json(json), Admin.class);
+
+        } catch (Exception e) {
+            System.out.println("Admin login failed: " + e.getMessage());
+            return null;
+        }
     }
 }

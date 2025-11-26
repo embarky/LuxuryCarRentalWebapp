@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      lang="en">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Settings</title>
+    <h:outputStylesheet name="css/page-style.css"/>
+</h:head>
+
+<h:body>
+    <div class="page-container">
+        <div class="content-header">
+            <h1 class="page-title">Settings</h1>
+            <p class="page-subtitle">System configuration and preferences</p>
+        </div>
+
+        <div class="content-body">
+            <div class="welcome-message">
+                <h2>System Settings</h2>
+                <p>Configure system settings and preferences.</p>
+            </div>
+
+            <!-- 示例：使用 JSF 表单修改系统设置 -->
+            <h:form>
+                <h:panelGrid columns="2" columnClasses="label,value" styleClass="settings-grid">
+
+                    <h:outputLabel for="siteName" value="Site Name:"/>
+                    <h:inputText id="siteName" value="#{settingsBean.siteName}" />
+
+                    <h:outputLabel for="adminEmail" value="Admin Email:"/>
+                    <h:inputText id="adminEmail" value="#{settingsBean.adminEmail}" />
+
+                    <h:outputLabel for="maintenanceMode" value="Maintenance Mode:"/>
+                    <h:selectBooleanCheckbox id="maintenanceMode" value="#{settingsBean.maintenanceMode}" />
+
+                    <h:outputLabel/>
+                    <h:commandButton value="Save Settings" action="#{settingsBean.saveSettings}" />
+                </h:panelGrid>
+            </h:form>
+        </div>
+    </div>
+</h:body>
+</html>

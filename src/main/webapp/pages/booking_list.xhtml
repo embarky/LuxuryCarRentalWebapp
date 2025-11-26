@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="en">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>All Bookings</title>
+</h:head>
+
+<h:body>
+    <h:form id="bookingListForm">
+
+        <h2>All Bookings</h2>
+
+        <p:dataTable value="#{bookingBean.allBookings}" var="b" stripedRows="true" paginator="true" rows="10">
+
+            <p:column headerText="Car">
+                #{b.car.carType.brand} #{b.car.carType.model}
+            </p:column>
+
+            <p:column headerText="Color">
+                #{b.car.color}
+            </p:column>
+
+            <p:column headerText="License Plate">
+                #{b.car.licensePlate}
+            </p:column>
+
+            <p:column headerText="Customer ID">
+                #{b.customerId}
+            </p:column>
+
+            <p:column headerText="Start Date">
+                #{b.startDate}
+            </p:column>
+
+            <p:column headerText="End Date">
+                #{b.endDate}
+            </p:column>
+
+            <p:column headerText="Status">
+                #{b.bookingStatus}
+            </p:column>
+
+            <p:column headerText="Total Cost">
+                $#{b.totalCost}
+            </p:column>
+
+            <p:column headerText="Actions">
+                <p:commandButton value="View Details"
+                                 icon="pi pi-eye"
+                                 action="#{bookingBean.viewBookingDetails(b.bookingId)}"
+                                 update="@form"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </h:form>
+</h:body>
+</html>

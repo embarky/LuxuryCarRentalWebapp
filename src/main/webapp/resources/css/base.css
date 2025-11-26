@@ -1,0 +1,31 @@
+/* Base Styles and Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    color: #1a1a1a;
+    overflow-x: hidden;
+    /* Fallback/Background for areas outside of sections */
+    background-color: #1a1a1a;
+}
+
+/* Animation Keyframes - Placed in the base file */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

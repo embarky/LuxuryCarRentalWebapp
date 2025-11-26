@@ -1,0 +1,38 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+
+    <cc:interface>
+        <cc:attribute name="model" required="true" />
+        <cc:attribute name="engine" required="true" />
+        <cc:attribute name="seats" required="true" />
+        <cc:attribute name="price" required="true" />
+        <cc:attribute name="badge" />
+    </cc:interface>
+
+    <cc:implementation>
+        <div class="car-card">
+            <div class="car-image" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
+                <ui:fragment rendered="#{cc.attrs.badge}">
+                    <div class="car-badge">#{cc.attrs.badge}</div>
+                </ui:fragment>
+            </div>
+            <div class="car-info">
+                <h3>#{cc.attrs.model}</h3>
+                <div class="car-specs">
+                    <span>⚡ #{cc.attrs.engine}</span>
+                    <span>🪑 #{cc.attrs.seats} Seater</span>
+                    <span>⚙️ Auto</span>
+                </div>
+                <div class="car-price">
+                    <div>
+                        <div class="price">¥#{cc.attrs.price}</div>
+                        <div class="price-label">Per Day</div>
+                    </div>
+                    <button class="book-btn">Book</button>
+                </div>
+            </div>
+        </div>
+    </cc:implementation>
+</ui:composition>

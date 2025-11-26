@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="en">
+
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>All Car Types</title>
+</h:head>
+
+<h:body>
+    <h2>All Car Types</h2>
+
+    <h:form id="carTypeListForm">
+
+        <!-- Add New Car Type Button -->
+        <p:commandButton value="Add New Car Type" icon="pi pi-plus" action="add_car_type.xhtml" />
+
+        <!-- PrimeFaces DataTable -->
+        <p:dataTable value="#{carTypeListBean.allCarTypes}" var="ct" stripedRows="true" paginator="true" rows="10">
+
+            <p:column headerText="Brand">
+                #{ct.brand}
+            </p:column>
+
+            <p:column headerText="Model">
+                #{ct.model}
+            </p:column>
+
+            <p:column headerText="Category">
+                #{ct.category}
+            </p:column>
+
+            <p:column headerText="Engine">
+                #{ct.engine}
+            </p:column>
+
+            <p:column headerText="Seats">
+                #{ct.seats}
+            </p:column>
+
+            <p:column headerText="Power">
+                #{ct.power}
+            </p:column>
+
+            <p:column headerText="Max Speed">
+                #{ct.maxSpeed}
+            </p:column>
+
+            <p:column headerText="Drive Type">
+                #{ct.driveType}
+            </p:column>
+
+            <p:column headerText="Transmission">
+                #{ct.transmission}
+            </p:column>
+
+            <p:column headerText="Actions">
+                <p:commandButton value="Edit"
+                                 icon="pi pi-pencil"
+                                 action="#{carTypeListBean.edit(ct)}"
+                                 update="@form"/>
+                <p:commandButton value="Delete"
+                                 icon="pi pi-trash"
+                                 action="#{carTypeListBean.delete(ct)}"
+                                 update="@form"
+                                 styleClass="ui-button-danger"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </h:form>
+</h:body>
+</html>

@@ -1,64 +1,84 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Luxury Car Rental</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <style type="text/css">
-        html, body { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; }
-        #video-bg { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden; }
-        #video-bg iframe { width:100%; height:100%; position:fixed; top:0; left:0; z-index:-1; pointer-events:none; }
-        .navbar { position: fixed; top:0; left:0; width:100%; background-color: rgba(13,27,76,0.6); z-index:10; padding:1rem; display:flex; justify-content:space-between; align-items:center; }
-        .navbar a { color:#F8F8F0; margin-right:1rem; text-decoration:none; font-weight:bold; }
-        .navbar a:hover { color:#D6B85A; }
-        .content { position: relative; z-index:5; text-align:center; padding:200px 1rem 2rem 1rem; color:#F8F8F0; text-shadow:0 0 10px rgba(0,0,0,0.7); }
-        .button-primary { background-color:#0D1B4C; color:#D6B85A; padding:0.6rem 1.5rem; border:2px solid #D6B85A; border-radius:8px; font-weight:bold; text-decoration:none; display:inline-block; transition: all 0.3s ease; }
-        .button-primary:hover { background-color:#D6B85A; color:#0D1B4C; }
-        .footer { position: relative; z-index:5; text-align:center; padding:1.5rem; margin-top:2rem; background-color: rgba(13,27,76,0.7); color:#F8F8F0; }
-    </style>
-</head>
-<body>
+<ui:composition template="/resources/templates/master_template.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:ed="http://xmlns.jcp.org/jsf/composite/templates"> <ui:define name="content">
 
-<!-- Video Background -->
-<div id="video-bg">
-    <iframe
-            src="https://www.youtube.com/embed/NmoUJ60RNZs?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=NmoUJ60RNZs&amp;controls=0&amp;disablekb=1&amp;cc_load_policy=0"
-            frameborder="0"
-            style="width:100%; height:100%; position:fixed; top:0; left:0; z-index:-1; pointer-events:none;">
-    </iframe>
-</div>
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">Luxury Driving Within Reach</h1>
+            <p class="hero-subtitle">Experience World's Top Luxury Cars and Exceptional Driving Pleasure</p>
+            <div class="hero-buttons">
+                <button class="btn-primary">Book Now</button>
+                <button class="btn-secondary">Learn More</button>
+            </div>
+        </div>
+        <div id="video-bg">
+            <iframe
+                    src="https://www.youtube.com/embed/NmoUJ60RNZs?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=NmoUJ60RNZs&amp;controls=0&amp;disablekb=1&amp;cc_load_policy=0"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen="allowfullscreen">
+            </iframe>
+        </div>
+    </section>
 
-<!-- Header -->
-<div class="navbar" style="
-    position: fixed;
-    top: 0; left: 0; width: 100%;
-    padding: 1rem; display: flex; justify-content: space-between; align-items: center;
-    z-index: 10;
-    /* Gradient background: left fully visible, right fading to black */
-    background: linear-gradient(to right, rgba(13,27,76,0.8) 0%, rgba(13,27,76,0.0) 100%);
-">
-    <h1 style="color:#D6B85A; margin:0;">LuxuryCarRental</h1>
-    <div>
-        <a href="index.xhtml">Home</a>
-        <a href="cars.xhtml">Cars</a>
-        <a href="about.xhtml">About</a>
-        <a href="contact.xhtml">Contact</a>
-    </div>
-</div>
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose <span>Us</span></h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">👑</div>
+                <h3>Premier Fleet</h3>
+                <p>Featuring Rolls-Royce, Bentley, Ferrari, and other world-class luxury brands. Every vehicle is strictly selected and professionally maintained.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Comprehensive Coverage</h3>
+                <p>Offering full-range insurance and 24-hour roadside assistance, ensuring your every journey is worry-free.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Concierge Service</h3>
+                <p>Dedicated one-on-one account managers, delivery to your door, and chauffeur services to meet your every distinguished need.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3>Flexible Rental Terms</h3>
+                <p>Support hourly, daily, or long-term rentals. Flexible solutions to suit your various occasion needs.</p>
+            </div>
+        </div>
+    </section>
 
-<!-- Main Content -->
-<div class="content">
-    <h2>Welcome to LuxuryCarRental</h2>
-    <p>Experience premium cars and top-notch service. Book your luxury ride today!</p>
-    <a href="booking.xhtml" class="button-primary">Book Now</a>
-</div>
+    <section class="cars-section" id="cars">
+        <h2 class="section-title">Popular <span>Models</span></h2>
+        <div class="cars-grid">
+            <ed:car_card_component model="Rolls-Royce Phantom" engine="V12" seats="5" price="15,000" badge="HOT" />
+            <ed:car_card_component model="Bentley Flying Spur" engine="W12" seats="4" price="12,000" badge="VIP" />
+            <ed:car_card_component model="Ferrari 812" engine="V12" seats="2" price="18,000" badge="NEW" />
+            <ed:car_card_component model="Lamborghini Urus" engine="V8" seats="5" price="16,000" />
+            <ed:car_card_component model="Maybach S-Class" engine="V8" seats="4" price="10,000" />
+            <ed:car_card_component model="Porsche 911 Turbo" engine="H6" seats="4" price="8,000" />
+        </div>
+    </section>
 
-<!-- Footer -->
-<div class="footer">
-    <p>&copy; 2025 LuxuryCarRental. All rights reserved.</p>
-</div>
-
-</body>
-</html>
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>500+</h3>
+                <p>Luxury Vehicles</p>
+            </div>
+            <div class="stat-item">
+                <h3>10K+</h3>
+                <p>Satisfied Clients</p>
+            </div>
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>Service Cities</p>
+            </div>
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p>Full-Time Service</p>
+            </div>
+        </div>
+    </section>
+</ui:define>
+</ui:composition>

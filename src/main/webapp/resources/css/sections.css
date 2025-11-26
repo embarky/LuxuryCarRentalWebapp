@@ -1,0 +1,379 @@
+/* ========================
+   Video Background (Fixed Positioning)
+   ======================== */
+#video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+}
+
+#video-bg iframe {
+    /* Ensure the iframe covers the viewport regardless of aspect ratio */
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* ========================
+   Hero Section
+   ======================== */
+.hero {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /* Crucial: Semi-transparent overlay to let the video show through */
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+            radial-gradient(circle at 20% 50%, rgba(201, 165, 90, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(201, 165, 90, 0.05) 0%, transparent 50%);
+    animation: pulse 8s ease-in-out infinite;
+}
+
+.hero-content {
+    text-align: center;
+    color: #fff;
+    z-index: 1; /* Ensure content is above the video */
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-size: 72px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #C9A55A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeInUp 1s ease-out;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtitle {
+    font-size: 24px;
+    margin-bottom: 40px;
+    color: #fff;
+    letter-spacing: 2px;
+    animation: fadeInUp 1s ease-out 0.2s backwards;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    animation: fadeInUp 1s ease-out 0.4s backwards;
+}
+
+/* ========================
+   Features Section & General Titles
+   ======================== */
+.features {
+    padding: 100px 40px;
+    background: #f8f8f8;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: 60px;
+    color: #1a1a1a;
+}
+
+.section-title span {
+    background: linear-gradient(135deg, #C9A55A 0%, #F4E4C1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.features-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+}
+
+/* ========================
+   Cars Showcase Section
+   ======================== */
+.cars-section {
+    padding: 100px 40px;
+    background: #1a1a1a;
+}
+
+.cars-section .section-title {
+    color: #fff;
+}
+
+.cars-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+}
+
+.car-card {
+    background: #2a2a2a;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.car-card:hover {
+    transform: translateY(-10px);
+    border-color: #C9A55A;
+    box-shadow: 0 20px 50px rgba(201, 165, 90, 0.3);
+}
+
+.car-image {
+    height: 240px;
+    background: linear-gradient(135deg, #C9A55A 0%, #F4E4C1 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.car-image::before {
+    content: '🚗';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    opacity: 0.3;
+}
+
+.car-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #C9A55A;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.car-info {
+    padding: 30px;
+}
+
+.car-info h3 {
+    color: #fff;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.car-specs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    color: #999;
+    font-size: 14px;
+}
+
+.car-specs span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.car-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.price {
+    font-size: 32px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #C9A55A 0%, #F4E4C1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.price-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.book-btn {
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #C9A55A 0%, #F4E4C1 100%);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.book-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 20px rgba(201, 165, 90, 0.4);
+}
+
+/* ========================
+   Stats Section
+   ======================== */
+.stats {
+    padding: 80px 40px;
+    background: linear-gradient(135deg, #C9A55A 0%, #F4E4C1 100%);
+}
+
+.stats-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    text-align: center;
+}
+
+.stat-item h3 {
+    font-size: 56px;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.stat-item p {
+    font-size: 18px;
+    color: #333;
+}
+
+/* ========================
+   Footer
+   ======================== */
+.footer {
+    background: #0a0a0a;
+    color: #fff;
+    padding: 60px 40px 30px;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section h3 {
+    color: #C9A55A;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.footer-section p {
+    color: #999;
+    line-height: 1.8;
+    margin-bottom: 10px;
+}
+
+.footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid #333;
+    color: #666;
+}
+
+/* ========================
+   Responsive Design
+   ======================== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 42px;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    /* Mobile optimization: Hide video background for performance */
+    #video-bg {
+        display: none;
+    }
+
+    .hero {
+        /* Mobile fallback background color */
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    }
+}
+
+/* ... existing section styles like .hero, .cars-section ... */
+
+/* ========================
+   Vehicle Detail Section (Car Detail Hero)
+   ======================== */
+.car-detail-hero {
+    min-height: 60vh;
+    height: auto;
+    background-color: #1a1a1a;
+    position: relative;
+    padding: 100px 40px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+}
+
+.detail-background {
+    /* Placeholder for the actual image or dynamic background effect */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Use a placeholder image path */
+    opacity: 0.3; /* Subtle background effect */
+    z-index: 0;
+}
+
+.detail-overlay-content {
+    position: relative;
+    z-index: 1;
+}
+
+.price-tag {
+    margin-top: 20px;
+}
