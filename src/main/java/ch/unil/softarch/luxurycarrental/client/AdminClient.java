@@ -19,7 +19,7 @@ import java.util.UUID;
 public class AdminClient implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static final String BASE_URL = "http://localhost:8080/LuxuryCarRental/api/admins";
+    private static final String BASE_URL = "http://localhost:8080/luxurycarrental/api/admins";
     private final Client client;
     private final WebTarget adminTarget;
 
@@ -45,9 +45,18 @@ public class AdminClient implements Serializable {
 
     // Add new admin
     public Admin addAdmin(Admin admin) {
-        return adminTarget
+        Response response = adminTarget
                 .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(admin, MediaType.APPLICATION_JSON), Admin.class);
+                .post(Entity.entity(admin, MediaType.APPLICATION_JSON));
+
+        if (response.getStatus() == 200 || response.getStatus() == 201) {
+            return response.readEntity(Admin.class);
+        } else {
+            System.out.println(">>> Status: " + response.getStatus());
+            String body = response.readEntity(String.class);
+            System.out.println(">>> Body: " + body);
+            return null;
+        }
     }
 
     // Update existing admin
@@ -65,15 +74,6 @@ public class AdminClient implements Serializable {
                 .request(MediaType.APPLICATION_JSON)
                 .delete();
         return response.getStatus() == 200;
-    }
-
-    // Login
-    public Map<String, Object> login(String username, String password) {
-        Map<String, String> body = Map.of("username", username, "password", password);
-        return adminTarget
-                .path("login")
-                .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(body, MediaType.APPLICATION_JSON), new GenericType<Map<String, Object>>() {});
     }
 
     // Send password reset code
@@ -95,22 +95,37 @@ public class AdminClient implements Serializable {
                 .put(Entity.entity(body, MediaType.APPLICATION_JSON), new GenericType<Map<String, String>>() {});
     }
 
-    public Admin authenticate(String username, String password) {
-        try {
-            var json = """
-                {
-                    "username": "%s",
-                    "password": "%s"
-                }
-            """.formatted(username, password);
+    // Login admin
+    public Admin loginAdmin(String email, String password) {
+        // Prepare request body
+        Map<String, String> requestBody = Map.of(
+                "email", email,
+                "password", password
+        );
 
-            return client.target(BASE_URL + "/login")
-                    .request(MediaType.APPLICATION_JSON)
-                    .post(Entity.json(json), Admin.class);
+        // Send POST request
+        Response response = client.target(BASE_URL + "/login")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(requestBody));
 
-        } catch (Exception e) {
-            System.out.println("Admin login failed: " + e.getMessage());
+        // Check response
+        if (response.getStatus() == 200) {
+            // Login successful, return Admin
+            return response.readEntity(Admin.class);
+        } else {
+            // Login failed, print status and response body
+            System.out.println(">>> Status: " + response.getStatus());
+            String body = response.readEntity(String.class);
+            System.out.println(">>> Body: " + body);
             return null;
         }
+    }
+
+    // --- NEW: find by username ---
+    public Admin findByUsername(String username) {
+        return adminTarget.path("by-username")
+                .queryParam("username", username)
+                .request(MediaType.APPLICATION_JSON)
+                .get(Admin.class);
     }
 }

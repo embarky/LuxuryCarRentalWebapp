@@ -1,112 +1,101 @@
 package ch.unil.softarch.luxurycarrental.ui;
 
-import ch.unil.softarch.luxurycarrental.client.CustomerClient;
 import ch.unil.softarch.luxurycarrental.client.AdminClient;
-import ch.unil.softarch.luxurycarrental.domain.entities.Customer;
+import ch.unil.softarch.luxurycarrental.client.CustomerClient;
 import ch.unil.softarch.luxurycarrental.domain.entities.Admin;
+import ch.unil.softarch.luxurycarrental.domain.entities.Customer;
 
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.inject.Inject;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.Serializable;
 
-@SessionScoped
-@Named
+@Named("userLoginBean")
+@ViewScoped
 public class UserLoginBean implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
-    private String username;
-    private String password;
-    private String role;  // "customer" or "admin"
-
-    @Inject
-    private CustomerClient customerClient;
-
-    @Inject
-    private AdminClient adminClient;
-
+    // ===== Customer Login =====
+    private String customerEmail;
+    private String customerPassword;
     private Customer customer;
+
+    // ===== Admin Login =====
+    private String adminEmail;
+    private String adminPassword;
     private Admin admin;
 
-    public UserLoginBean() {
-        reset();
-    }
+    // ===== REST Clients =====
+    private final CustomerClient customerClient = new CustomerClient();
+    private final AdminClient adminClient = new AdminClient();
 
-    public void reset() {
-        username = null;
-        password = null;
-        role = null;
-        customer = null;
-        admin = null;
-    }
-
-    public String login() {
-
-        HttpSession session = getSession(true);
-
+    // ===== Customer Login =====
+    public String loginCustomer() {
         try {
-            if ("customer".equals(role)) {
-                customer = customerClient.authenticate(username, password);
-                if (customer != null) {
-                    session.setAttribute("username", username);
-                    session.setAttribute("role", "customer");
-                    return "CustomerDashboard?faces-redirect=true";
-                }
+            if (customerEmail == null || customerEmail.isEmpty() || customerPassword == null || customerPassword.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email and Password are required", null));
+                return null;
             }
 
-            if ("admin".equals(role)) {
-                admin = adminClient.authenticate(username, password);
-                if (admin != null) {
-                    session.setAttribute("username", username);
-                    session.setAttribute("role", "admin");
-                    return "AdminDashboard?faces-redirect=true";
-                }
-            }
+            customer = customerClient.authenticate(customerEmail, customerPassword);
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer login successful: " + customerEmail, null));
+
+            return "CustomerDashboard?faces-redirect=true";
 
         } catch (Exception e) {
-            e.printStackTrace();
+            customer = null;
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Customer login failed: " + (e.getMessage() != null ? e.getMessage() : "Unknown error"), null));
+            return null;
         }
-
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                        "Invalid login credentials", null));
-
-        reset();
-        return "Login";
     }
 
-    public String logout() {
-        invalidateSession();
-        reset();
-        return "Login?faces-redirect=true";
+    // ===== Admin Login =====
+    public String loginAdmin() {
+        try {
+            if (adminEmail == null || adminEmail.isEmpty() || adminPassword == null || adminPassword.isEmpty()) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email and Password are required", null));
+                return null;
+            }
+
+            admin = adminClient.loginAdmin(adminEmail, adminPassword);
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Admin login successful: " + adminEmail, null));
+
+            return "AdminDashboard?faces-redirect=true";
+
+        } catch (Exception e) {
+            admin = null;
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Admin login failed: " + (e.getMessage() != null ? e.getMessage() : "Unknown error"), null));
+            return null;
+        }
     }
 
-    // --- Session utils ---
-    public static HttpSession getSession(boolean create) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (facesContext == null) return null;
-        return (HttpSession) facesContext.getExternalContext().getSession(create);
-    }
+    // ===== Getters & Setters =====
+    public String getCustomerEmail() { return customerEmail; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
 
-    public static void invalidateSession() {
-        HttpSession session = getSession(false);
-        if (session != null) session.invalidate();
-    }
-
-    // --- Getters and Setters ---
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getCustomerPassword() { return customerPassword; }
+    public void setCustomerPassword(String customerPassword) { this.customerPassword = customerPassword; }
 
     public Customer getCustomer() { return customer; }
+
+    public String getAdminEmail() { return adminEmail; }
+    public void setAdminEmail(String adminEmail) { this.adminEmail = adminEmail; }
+
+    public String getAdminPassword() { return adminPassword; }
+    public void setAdminPassword(String adminPassword) { this.adminPassword = adminPassword; }
+
     public Admin getAdmin() { return admin; }
 }

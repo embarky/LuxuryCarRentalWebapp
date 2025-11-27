@@ -7,89 +7,97 @@
       lang="en">
 
 <h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>ELITE DRIVE - User Registration</title>
-
-    <!-- PrimeFaces CSS, optional if included globally -->
-    <h:outputStylesheet library="css" name="primefaces.css"/>
 </h:head>
 
 <h:body>
     <h:form id="registrationForm">
 
+        <!-- Global Messages -->
+        <p:messages id="globalMessages"
+                    autoUpdate="true"
+                    closable="true"
+                    showDetail="true"/>
+
         <h2>User Registration</h2>
 
-        <!-- PrimeFaces TabView for Admin / Customer -->
-        <p:tabView>
-            <!-- Admin Tab -->
+        <p:tabView dynamic="true" cache="false">
+
+            <!-- Admin Registration -->
             <p:tab title="Admin Registration">
                 <p:panelGrid columns="2" cellpadding="5">
                     <h:outputLabel for="adminUsername" value="Username:"/>
-                    <h:inputText id="adminUsername" value="#{userRegisterBean.adminUsername}" required="true"/>
+                    <h:inputText id="adminUsername" value="#{registerBean.adminUsername}" required="true"/>
 
                     <h:outputLabel for="adminPassword" value="Password:"/>
-                    <h:inputSecret id="adminPassword" value="#{userRegisterBean.adminPassword}" required="true"/>
+                    <h:inputSecret id="adminPassword" value="#{registerBean.adminPassword}" required="true"/>
 
                     <h:outputLabel for="adminName" value="Name:"/>
-                    <h:inputText id="adminName" value="#{userRegisterBean.adminName}" required="true"/>
+                    <h:inputText id="adminName" value="#{registerBean.adminName}" required="true"/>
 
                     <h:outputLabel for="adminEmail" value="Email:"/>
-                    <h:inputText id="adminEmail" value="#{userRegisterBean.adminEmail}" required="true"/>
+                    <h:inputText id="adminEmail" value="#{registerBean.adminEmail}" required="true"/>
                 </p:panelGrid>
 
                 <p:commandButton value="Register Admin"
-                                 action="#{userRegisterBean.registerAdmin}"
-                                 update="@form"
-                                 icon="pi pi-user-plus"/>
+                                 action="#{registerBean.registerAdmin}"
+                                 update="registrationForm:globalMessages"
+                                 process="adminUsername adminPassword adminName adminEmail"
+                                 icon="pi pi-user-plus"
+                                 ajax="true"/>
             </p:tab>
 
-            <!-- Customer Tab -->
+            <!-- Customer Registration -->
             <p:tab title="Customer Registration">
                 <p:panelGrid columns="2" cellpadding="5">
                     <h:outputLabel for="firstName" value="First Name:"/>
-                    <h:inputText id="firstName" value="#{userRegisterBean.firstName}" required="true"/>
+                    <h:inputText id="firstName" value="#{registerBean.firstName}" required="true"/>
 
                     <h:outputLabel for="lastName" value="Last Name:"/>
-                    <h:inputText id="lastName" value="#{userRegisterBean.lastName}" required="true"/>
+                    <h:inputText id="lastName" value="#{registerBean.lastName}" required="true"/>
 
                     <h:outputLabel for="password" value="Password:"/>
-                    <h:inputSecret id="password" value="#{userRegisterBean.password}" required="true"/>
+                    <h:inputSecret id="password" value="#{registerBean.password}" required="true"/>
 
                     <h:outputLabel for="email" value="Email:"/>
-                    <h:inputText id="email" value="#{userRegisterBean.email}" required="true"/>
+                    <h:inputText id="email" value="#{registerBean.email}" required="true"/>
 
                     <h:outputLabel for="phoneNumber" value="Phone Number:"/>
-                    <h:inputText id="phoneNumber" value="#{userRegisterBean.phoneNumber}"/>
+                    <h:inputText id="phoneNumber" value="#{registerBean.phoneNumber}"/>
 
                     <h:outputLabel for="drivingLicenseNumber" value="Driving License No:"/>
-                    <h:inputText id="drivingLicenseNumber" value="#{userRegisterBean.drivingLicenseNumber}"/>
+                    <h:inputText id="drivingLicenseNumber" value="#{registerBean.drivingLicenseNumber}"/>
 
                     <h:outputLabel for="drivingLicenseExpiryDate" value="License Expiry:"/>
-                    <h:inputText id="drivingLicenseExpiryDate" value="#{userRegisterBean.drivingLicenseExpiryDate}"/>
+                    <p:datePicker id="drivingLicenseExpiryDate"
+                                  value="#{registerBean.drivingLicenseExpiryDate}"
+                                  pattern="yyyy-MM-dd"
+                                  showIcon="true"
+                                  required="true"/>
 
                     <h:outputLabel for="age" value="Age:"/>
-                    <h:inputText id="age" value="#{userRegisterBean.age}"/>
+                    <h:inputText id="age" value="#{registerBean.age}"/>
 
                     <h:outputLabel for="verifiedIdentity" value="Verified Identity:"/>
-                    <h:selectBooleanCheckbox id="verifiedIdentity" value="#{userRegisterBean.verifiedIdentity}"/>
+                    <h:selectBooleanCheckbox id="verifiedIdentity" value="#{registerBean.verifiedIdentity}"/>
 
                     <h:outputLabel for="billingAddress" value="Billing Address:"/>
-                    <h:inputText id="billingAddress" value="#{userRegisterBean.billingAddress}"/>
+                    <h:inputText id="billingAddress" value="#{registerBean.billingAddress}"/>
 
                     <h:outputLabel for="balance" value="Balance:"/>
-                    <h:inputText id="balance" value="#{userRegisterBean.balance}"/>
+                    <h:inputText id="balance" value="#{registerBean.balance}"/>
                 </p:panelGrid>
 
                 <p:commandButton value="Register Customer"
-                                 action="#{userRegisterBean.registerCustomer}"
-                                 update="@form"
-                                 icon="pi pi-user-plus"/>
+                                 action="#{registerBean.registerCustomer}"
+                                 update="registrationForm:globalMessages"
+                                 process="firstName lastName password email phoneNumber drivingLicenseNumber drivingLicenseExpiryDate age verifiedIdentity billingAddress balance"
+                                 icon="pi pi-user-plus"
+                                 ajax="ture"/>
             </p:tab>
+
         </p:tabView>
 
-        <!-- Messages -->
-        <p:messages id="messages" autoUpdate="true" showDetail="true"/>
     </h:form>
 </h:body>
 </html>

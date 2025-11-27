@@ -19,7 +19,7 @@ import java.util.UUID;
 public class CustomerClient implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static final String BASE_URL = "http://localhost:8080/LuxuryCarRental/api/customers";
+    private static final String BASE_URL = "http://localhost:8080/luxurycarrental/api/customers";
     private final Client client;
     private final WebTarget customerTarget;
 
@@ -44,9 +44,23 @@ public class CustomerClient implements Serializable {
     }
 
     public Customer addCustomer(Customer customer) {
-        return customerTarget
+        // Send a POST request to the customer REST endpoint with JSON payload
+        Response response = customerTarget
                 .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(customer, MediaType.APPLICATION_JSON), Customer.class);
+                .post(Entity.entity(customer, MediaType.APPLICATION_JSON));
+
+        // Print the HTTP response status for debugging
+        System.out.println(">>> Status: " + response.getStatus());
+
+        if (response.getStatus() == 200 || response.getStatus() == 201) {
+            // If the request is successful, read and return the Customer object
+            return response.readEntity(Customer.class);
+        } else {
+            // If the request fails, read the response body as String and print it
+            String body = response.readEntity(String.class);
+            System.out.println(">>> Body: " + body);
+            return null;
+        }
     }
 
     public Customer updateCustomer(UUID id, Customer customer) {
@@ -95,22 +109,31 @@ public class CustomerClient implements Serializable {
                         new GenericType<Map<String, String>>() {});
     }
 
-    public Customer authenticate(String username, String password) {
-        try {
-            var json = """
-                {
-                    "username": "%s",
-                    "password": "%s"
-                }
-            """.formatted(username, password);
+    // Existing authentication
+    public Customer authenticate(String email, String password) {
+        Map<String, String> requestBody = Map.of(
+                "email", email,
+                "password", password
+        );
 
-            return client.target(BASE_URL + "/login")
-                    .request(MediaType.APPLICATION_JSON)
-                    .post(Entity.json(json), Customer.class);
+        Response response = client.target(BASE_URL + "/login")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(requestBody));
 
-        } catch (Exception e) {
-            System.out.println("Customer login failed: " + e.getMessage());
-            return null;
+        if (response.getStatus() == 200) {
+            // Return Customer object
+            return response.readEntity(Customer.class);
+        } else {
+            // Login failed, throw exception or return null
+            throw new RuntimeException("Login failed: " + response.readEntity(Map.class).get("message"));
         }
+    }
+
+    // --- NEW: find by username ---
+    public Customer findByUsername(String username) {
+        return customerTarget.path("by-username")
+                .queryParam("username", username)
+                .request(MediaType.APPLICATION_JSON)
+                .get(Customer.class);
     }
 }

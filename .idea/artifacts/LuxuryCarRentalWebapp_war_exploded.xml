@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="LuxuryCarRentalWebapp:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/LuxuryCarRentalWebapp_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="LuxuryCarRentalWebapp" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:jakarta:14.0.5" />
+          <element id="library" level="project" name="Maven: ch.unil.softarch.luxurycarrental:LuxuryCarRentalDomain:1.0-SNAPSHOT" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="LuxuryCarRentalWebapp/web/Web" />
+    </root>
+  </artifact>
+</component>
