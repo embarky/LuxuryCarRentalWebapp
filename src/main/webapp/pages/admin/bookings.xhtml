@@ -1,62 +1,98 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      lang="en">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
 <h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>All Bookings</title>
-    <h:outputStylesheet name="css/page-style.css"/>
+    <title>Bookings</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+    <h:outputStylesheet name="css/admin-page.css" />
+
+    <script>
+        /* Toggle hidden detail row */
+        function toggleDetails(id) {
+            const row = document.getElementById(id);
+            row.style.display = row.style.display === "table-row" ? "none" : "table-row";
+        }
+    </script>
 </h:head>
 
-<h:body>
-    <div class="page-container">
-        <div class="content-header">
-            <h1 class="page-title">All Bookings</h1>
-            <p class="page-subtitle">View and manage all bookings</p>
-        </div>
+<h:body style="background:#f7f7f7;">
 
-        <div class="content-body">
-            <div class="welcome-message">
-                <h2>All Bookings</h2>
-                <p>View and manage all customer bookings.</p>
+    <div class="container mt-5">
+
+        <h2 class="mb-4 text-center">Booking List</h2>
+
+        <div class="card shadow">
+            <div class="card-body">
+
+                <table class="table table-striped table-hover align-middle">
+
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Car</th>
+                        <th>Status</th>
+                        <th>Payment</th>
+                        <th>Date Range</th>
+                        <th>Total</th>
+                        <th class="edit-col">Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <ui:repeat value="#{bookingListBean.bookings}" var="b" varStatus="vs">
+
+                        <!-- Clickable row -->
+                        <tr onclick="toggleDetails('detail#{vs.index}')">
+                            <td>#{b.bookingId}</td>
+                            <td>#{b.customer.firstName} #{b.customer.lastName}</td>
+                            <td>#{b.car.carType.brand} #{b.car.carType.model}</td>
+                            <td>#{b.bookingStatus}</td>
+                            <td>#{b.paymentStatus}</td>
+                            <td>#{b.startDate} → #{b.endDate}</td>
+                            <td>CHF #{b.totalCost}</td>
+
+                            <!-- Fixed right-side buttons -->
+                            <td class="edit-col">
+                                <h:form style="display:inline-block">
+                                    <h:commandLink value="Edit"
+                                                   styleClass="btn btn-primary btn-sm me-1"
+                                                   action="#{bookingBean.goToEdit(b.bookingId)}"/>
+                                </h:form>
+                                <h:form style="display:inline-block">
+                                    <h:commandLink value="Delete"
+                                                   styleClass="btn btn-danger btn-sm"
+                                                   action="#{bookingBean.deleteBooking(b.bookingId)}"
+                                                   onclick="return confirm('Are you sure you want to delete this booking?');"/>
+                                </h:form>
+                            </td>
+                        </tr>
+
+                        <!-- Hidden detail row -->
+                        <tr id="detail#{vs.index}" class="details-row" style="display:none;">
+                            <td colspan="8" class="details-cell">
+                                <p><strong>Customer Email:</strong> #{b.customer.email}</p>
+                                <p><strong>Customer Phone:</strong> #{b.customer.phoneNumber}</p>
+                                <p><strong>Car VIN:</strong> #{b.car.vin}</p>
+                                <p><strong>Car Color:</strong> #{b.car.color}</p>
+                                <p><strong>Insurance Expiry:</strong> #{b.car.insuranceExpiryDate}</p>
+                                <p><strong>Last Maintenance:</strong> #{b.car.lastMaintenanceDate}</p>
+                            </td>
+                        </tr>
+
+                    </ui:repeat>
+                    </tbody>
+
+                </table>
+
             </div>
-
-            <!-- 示例：可以用 JSF 数据表显示订单列表 -->
-            <h:dataTable value="#{bookingBean.allBookings}" var="booking" border="1" styleClass="booking-table">
-                <h:column>
-                    <f:facet name="header">Booking ID</f:facet>
-                    #{booking.id}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Customer</f:facet>
-                    #{booking.customerName}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Car</f:facet>
-                    #{booking.car.model}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Start Date</f:facet>
-                    #{booking.startDate}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">End Date</f:facet>
-                    #{booking.endDate}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Status</f:facet>
-                    #{booking.bookingStatus}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Action</f:facet>
-                    <h:link value="Details" outcome="/pages/admin/booking_detail.xhtml">
-                        <f:param name="bookingId" value="#{booking.id}"/>
-                    </h:link>
-                </h:column>
-            </h:dataTable>
         </div>
+
     </div>
+
 </h:body>
 </html>

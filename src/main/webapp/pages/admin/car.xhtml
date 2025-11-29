@@ -1,70 +1,111 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      lang="en">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
 <h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Vehicle List</title>
-    <h:outputStylesheet name="css/page-style.css"/>
+    <title>Cars</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+    <!-- Custom admin page CSS -->
+    <h:outputStylesheet name="css/admin-page.css" />
+
+    <script>
+        /* Toggle hidden detail row */
+        function toggleDetails(id) {
+            const row = document.getElementById(id);
+            row.style.display = row.style.display === "table-row" ? "none" : "table-row";
+        }
+    </script>
 </h:head>
 
-<h:body>
-    <div class="page-container">
-        <div class="content-header">
-            <h1 class="page-title">Vehicle List</h1>
-            <p class="page-subtitle">Manage all vehicles in your fleet</p>
-        </div>
+<h:body style="background:#f7f7f7;">
 
-        <div class="content-body">
-            <div class="welcome-message">
-                <h2>Vehicle Management</h2>
-                <p>Here you can view and manage all vehicles in your fleet. Add vehicle details, update status, and track availability.</p>
+    <div class="container mt-5">
+
+        <h2 class="mb-4 text-center">Car List</h2>
+
+        <div class="card shadow">
+            <div class="card-body">
+
+                <!-- Car Table -->
+                <table class="table table-striped table-hover align-middle">
+
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Brand / Model</th>
+                        <th>Color</th>
+                        <th>License Plate</th>
+                        <th>Price / Day</th>
+                        <th>Status</th>
+                        <th class="edit-col">Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <!-- Iterate through cars -->
+                    <ui:repeat value="#{carListBean.cars}" var="car" varStatus="vs">
+
+                        <!-- Clickable row to expand details -->
+                        <tr onclick="toggleDetails('detail#{vs.index}')">
+                            <td>#{car.carType.brand} #{car.carType.model}</td>
+                            <td>#{car.color}</td>
+                            <td>#{car.licensePlate}</td>
+                            <td>CHF #{car.dailyRentalPrice}</td>
+                            <td>#{car.status}</td>
+
+                            <!-- Right-side fixed actions -->
+                            <td class="edit-col">
+                                <h:form style="display:inline-block">
+                                    <h:commandLink value="Edit"
+                                                   styleClass="btn btn-primary btn-sm me-1"
+                                                   action="#{carBean.goToEdit(car.id)}" />
+                                </h:form>
+                                <h:form style="display:inline-block">
+                                    <h:commandLink value="Delete"
+                                                   styleClass="btn btn-danger btn-sm"
+                                                   action="#{carBean.deleteCar(car.id)}"
+                                                   onclick="return confirm('Are you sure you want to delete this car?');" />
+                                </h:form>
+                            </td>
+                        </tr>
+
+                        <!-- Hidden detail row -->
+                        <tr id="detail#{vs.index}" class="details-row" style="display:none;">
+                            <td colspan="6" class="details-cell">
+                                <p><strong>Car Type Category:</strong> #{car.carType.category}</p>
+                                <p><strong>Engine:</strong> #{car.carType.engine}</p>
+                                <p><strong>Power:</strong> #{car.carType.power} hp</p>
+                                <p><strong>Seats:</strong> #{car.carType.seats}</p>
+                                <p><strong>Transmission:</strong> #{car.carType.transmission}</p>
+                                <p><strong>Drive Type:</strong> #{car.carType.driveType}</p>
+                                <p><strong>Max Speed:</strong> #{car.carType.maxSpeed} km/h</p>
+                                <p><strong>Weight:</strong> #{car.carType.weight} kg</p>
+                                <p><strong>Acceleration:</strong> #{car.carType.acceleration} sec 0-100</p>
+                                <strong>Features:</strong>
+                                <ui:repeat value="#{car.carType.features}" var="f">
+                                    <span class="badge bg-secondary me-1">#{f}</span>
+                                </ui:repeat>
+                                <p><strong>Registration Date:</strong> #{car.registrationDate}</p>
+                                <p><strong>Last Maintenance:</strong> #{car.lastMaintenanceDate}</p>
+                                <p><strong>Insurance Expiry:</strong> #{car.insuranceExpiryDate}</p>
+                                <p><strong>VIN:</strong> #{car.vin}</p>
+                                <p><strong>Image URL:</strong> <a href="#{car.imageUrl}" target="_blank">View Image</a></p>
+                            </td>
+                        </tr>
+
+                    </ui:repeat>
+                    </tbody>
+
+                </table>
+
             </div>
-
-            <!-- Vehicle Table -->
-            <h:dataTable value="#{carBean.allCars}" var="car" border="1" styleClass="vehicle-table">
-                <h:column>
-                    <f:facet name="header">ID</f:facet>
-                    #{car.id}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Brand</f:facet>
-                    #{car.brand}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Model</f:facet>
-                    #{car.model}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Category</f:facet>
-                    #{car.category}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Seats</f:facet>
-                    #{car.seats}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Transmission</f:facet>
-                    #{car.transmission}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Daily Price</f:facet>
-                    #{car.dailyRentalPrice}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Status</f:facet>
-                    #{car.status}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Action</f:facet>
-                    <h:link value="Edit" outcome="/pages/admin/add_car.xhtml">
-                        <f:param name="carId" value="#{car.id}"/>
-                    </h:link>
-                </h:column>
-            </h:dataTable>
         </div>
+
     </div>
+
 </h:body>
 </html>

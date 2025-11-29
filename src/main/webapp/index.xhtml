@@ -1,6 +1,7 @@
 <ui:composition template="/resources/templates/master_template.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ed="http://xmlns.jcp.org/jsf/composite/templates"> <ui:define name="content">
 
     <section class="hero" id="home">
@@ -49,15 +50,36 @@
     </section>
 
     <section class="cars-section" id="cars">
-        <h2 class="section-title">Popular <span>Models</span></h2>
-        <div class="cars-grid">
-            <ed:car_card_component model="Rolls-Royce Phantom" engine="V12" seats="5" price="15,000" badge="HOT" />
-            <ed:car_card_component model="Bentley Flying Spur" engine="W12" seats="4" price="12,000" badge="VIP" />
-            <ed:car_card_component model="Ferrari 812" engine="V12" seats="2" price="18,000" badge="NEW" />
-            <ed:car_card_component model="Lamborghini Urus" engine="V8" seats="5" price="16,000" />
-            <ed:car_card_component model="Maybach S-Class" engine="V8" seats="4" price="10,000" />
-            <ed:car_card_component model="Porsche 911 Turbo" engine="H6" seats="4" price="8,000" />
-        </div>
+        <h2 class="section-title">Available <span>Cars</span></h2>
+
+        <h:form id="carListForm">
+
+            <div class="cars-grid">
+                <!-- 遍历车辆列表 -->
+                <ui:repeat value="#{carsBean.carList}" var="car">
+
+                    <!-- 使用复合组件显示车辆卡片 -->
+                    <ed:car_card_component
+                            carId="#{car.id}"
+                            model="#{car.carType.brand} #{car.carType.model}"
+                            engine="#{car.carType.engine}"
+                            seats="#{car.carType.seats}"
+                            price="#{car.dailyRentalPrice}">
+
+                        <!-- 详情按钮，放在组件内部 -->
+                        <h:panelGroup>
+                            <h:commandLink value="View Details"
+                                           icon="pi pi-search"
+                                           action="#{carsBean.goToDetails(car.id)}"
+                                           styleClass="car-details-btn"/>
+                        </h:panelGroup>
+
+                    </ed:car_card_component>
+
+                </ui:repeat>
+            </div>
+
+        </h:form>
     </section>
 
     <section class="stats">

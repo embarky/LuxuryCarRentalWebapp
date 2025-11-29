@@ -1,34 +1,35 @@
 package ch.unil.softarch.luxurycarrental.ui;
 
+import ch.unil.softarch.luxurycarrental.client.BookingClient;
 import ch.unil.softarch.luxurycarrental.domain.entities.Booking;
-
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
-@Named
-@SessionScoped
+@Named("bookingListBean")
+@ViewScoped
 public class BookingListBean implements Serializable {
 
-    private List<Booking> allBookings; // 获取所有订单
-    private Booking selectedBooking;
+    private List<Booking> bookings;
 
-    public List<Booking> getAllBookings() {
-        // TODO: 从数据库或服务获取所有订单
-        return allBookings;
+    private final BookingClient bookingClient = new BookingClient();
+
+    @PostConstruct
+    public void init() {
+        try {
+            bookings = bookingClient.getAllBookings();
+            System.out.println("Fetched bookings: " + bookings.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            bookings = Collections.emptyList();
+        }
     }
 
-    public Booking getSelectedBooking() {
-        return selectedBooking;
-    }
-
-    public void viewBookingDetails(String bookingId) {
-        // TODO: 根据bookingId查询详细信息
-        selectedBooking = allBookings.stream()
-                .filter(b -> b.getBookingId().equals(bookingId))
-                .findFirst()
-                .orElse(null);
-        // 可跳转到详情页面
+    public List<Booking> getBookings() {
+        return bookings;
     }
 }

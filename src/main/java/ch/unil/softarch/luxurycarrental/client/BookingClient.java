@@ -2,6 +2,7 @@ package ch.unil.softarch.luxurycarrental.client;
 
 import ch.unil.softarch.luxurycarrental.domain.entities.Booking;
 import jakarta.ws.rs.client.Client;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
@@ -9,13 +10,15 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-public class BookingClient {
+@ApplicationScoped
+public class BookingClient implements Serializable {
 
-    private static final String BASE_URL = "http://localhost:8080/LuxuryCarRental/api/bookings";
+    private static final String BASE_URL = "http://localhost:8080/luxurycarrental/api/bookings";
     private final Client client;
     private final WebTarget bookingTarget;
 

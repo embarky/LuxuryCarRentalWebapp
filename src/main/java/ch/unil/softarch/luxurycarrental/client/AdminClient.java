@@ -76,23 +76,34 @@ public class AdminClient implements Serializable {
         return response.getStatus() == 200;
     }
 
-    // Send password reset code
-    public Map<String, String> sendPasswordResetCode(UUID id) {
+// ---------------- Admin ----------------
+
+    /**
+     * Send password reset code to admin via email
+     */
+    public Map<String, String> sendAdminResetCode(String email) {
+        Map<String, String> body = Map.of("email", email);
         return adminTarget
-                .path(id.toString())
                 .path("password-reset-code")
                 .request(MediaType.APPLICATION_JSON)
-                .post(null, new GenericType<Map<String, String>>() {});
+                .post(Entity.entity(body, MediaType.APPLICATION_JSON),
+                        new GenericType<Map<String, String>>() {});
     }
 
-    // Reset password with code
-    public Map<String, String> resetPasswordWithCode(UUID id, String code, String newPassword) {
-        Map<String, String> body = Map.of("code", code, "newPassword", newPassword);
+    /**
+     * Reset admin password with code and new password
+     */
+    public Map<String, String> resetAdminPassword(String email, String code, String newPassword) {
+        Map<String, String> body = Map.of(
+                "email", email,
+                "code", code,
+                "newPassword", newPassword
+        );
         return adminTarget
-                .path(id.toString())
                 .path("reset-password")
                 .request(MediaType.APPLICATION_JSON)
-                .put(Entity.entity(body, MediaType.APPLICATION_JSON), new GenericType<Map<String, String>>() {});
+                .put(Entity.entity(body, MediaType.APPLICATION_JSON),
+                        new GenericType<Map<String, String>>() {});
     }
 
     // Login admin

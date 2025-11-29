@@ -1,58 +1,96 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      lang="en">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
 <h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Customers</title>
-    <h:outputStylesheet name="css/page-style.css"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+    <!-- Custom admin page CSS -->
+    <h:outputStylesheet name="css/admin-page.css" />
+
+    <script>
+        /* Toggle hidden detail row */
+        function toggleDetails(id) {
+            const row = document.getElementById(id);
+            row.style.display = row.style.display === "table-row" ? "none" : "table-row";
+        }
+    </script>
 </h:head>
 
-<h:body>
-    <div class="page-container">
-        <div class="content-header">
-            <h1 class="page-title">Customers</h1>
-            <p class="page-subtitle">Manage customer accounts</p>
-        </div>
+<h:body style="background:#f7f7f7;">
 
-        <div class="content-body">
-            <div class="welcome-message">
-                <h2>Customer Management</h2>
-                <p>View and manage customer accounts and information.</p>
+    <div class="container mt-5">
+
+        <h2 class="mb-4 text-center">Customer List</h2>
+
+        <div class="card shadow">
+            <div class="card-body">
+
+                <!-- Customer Table -->
+                <table class="table table-striped table-hover align-middle">
+
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Balance</th>
+                        <th class="edit-col">Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <ui:repeat value="#{customerListBean.customers}" var="c" varStatus="vs">
+
+                        <!-- Clickable row to expand details -->
+                        <tr onclick="toggleDetails('detail#{vs.index}')">
+                            <td>#{c.firstName} #{c.lastName}</td>
+                            <td>#{c.email}</td>
+                            <td>#{c.phoneNumber}</td>
+                            <td>CHF #{c.balance}</td>
+
+                            <!-- Right-side fixed actions -->
+                            <td class="edit-col">
+                                <h:form style="display:inline-block">
+                                    <h:commandLink value="Edit"
+                                                   styleClass="btn btn-primary btn-sm me-1"
+                                                   action="#{customerBean.goToEdit(c.id)}" />
+                                </h:form>
+                                <h:form style="display:inline-block">
+                                    <h:commandLink value="Delete"
+                                                   styleClass="btn btn-danger btn-sm"
+                                                   action="#{customerBean.deleteCustomer(c.id)}"
+                                                   onclick="return confirm('Are you sure you want to delete this customer?');" />
+                                </h:form>
+                            </td>
+                        </tr>
+
+                        <!-- Hidden detail row -->
+                        <tr id="detail#{vs.index}" class="details-row" style="display:none;">
+                            <td colspan="5" class="details-cell">
+                                <p><strong>Customer ID:</strong> #{c.id}</p>
+                                <p><strong>Full Name:</strong> #{c.firstName} #{c.lastName}</p>
+                                <p><strong>Email:</strong> #{c.email}</p>
+                                <p><strong>Phone:</strong> #{c.phoneNumber}</p>
+                                <p><strong>Balance:</strong> CHF #{c.balance}</p>
+                                <!-- You can add more customer-specific details here -->
+                            </td>
+                        </tr>
+
+                    </ui:repeat>
+                    </tbody>
+
+                </table>
+
             </div>
-
-            <!-- Customer Table -->
-            <h:dataTable value="#{customerBean.allCustomers}" var="customer" border="1" styleClass="customer-table">
-                <h:column>
-                    <f:facet name="header">ID</f:facet>
-                    #{customer.id}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Name</f:facet>
-                    #{customer.name}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Email</f:facet>
-                    #{customer.email}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Phone</f:facet>
-                    #{customer.phone}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Status</f:facet>
-                    #{customer.status}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Action</f:facet>
-                    <h:link value="Details" outcome="/pages/admin/customer_detail.xhtml">
-                        <f:param name="customerId" value="#{customer.id}"/>
-                    </h:link>
-                </h:column>
-            </h:dataTable>
         </div>
+
     </div>
+
 </h:body>
 </html>

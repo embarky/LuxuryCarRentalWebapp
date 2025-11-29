@@ -89,20 +89,30 @@ public class CustomerClient implements Serializable {
                         new GenericType<Map<String, Object>>() {});
     }
 
-    // ---------------- Password Reset ----------------
+    // ---------------- Customer ----------------
 
-    public Map<String, String> sendPasswordResetCode(UUID id) {
+    /**
+     * Send password reset code to customer via email
+     */
+    public Map<String, String> sendCustomerResetCode(String email) {
+        Map<String, String> body = Map.of("email", email);
         return customerTarget
-                .path(id.toString())
                 .path("password-reset-code")
                 .request(MediaType.APPLICATION_JSON)
-                .post(null, new GenericType<Map<String, String>>() {});
+                .post(Entity.entity(body, MediaType.APPLICATION_JSON),
+                        new GenericType<Map<String, String>>() {});
     }
 
-    public Map<String, String> resetPasswordWithCode(UUID id, String code, String newPassword) {
-        Map<String, String> body = Map.of("code", code, "newPassword", newPassword);
+    /**
+     * Reset customer password with code and new password
+     */
+    public Map<String, String> resetCustomerPassword(String email, String code, String newPassword) {
+        Map<String, String> body = Map.of(
+                "email", email,
+                "code", code,
+                "newPassword", newPassword
+        );
         return customerTarget
-                .path(id.toString())
                 .path("reset-password")
                 .request(MediaType.APPLICATION_JSON)
                 .put(Entity.entity(body, MediaType.APPLICATION_JSON),
