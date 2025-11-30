@@ -146,4 +146,14 @@ public class CustomerClient implements Serializable {
                 .request(MediaType.APPLICATION_JSON)
                 .get(Customer.class);
     }
+
+    // --- NEW: verify customer identity ---
+    public Customer verifyCustomer(UUID id) {
+        return customerTarget
+                .path("verify")
+                .path(id.toString())
+                .request(MediaType.APPLICATION_JSON)
+                .put(Entity.json("{}"), Customer.class);
+    }
+
 }

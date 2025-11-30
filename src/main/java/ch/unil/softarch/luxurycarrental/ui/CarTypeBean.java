@@ -3,6 +3,8 @@ package ch.unil.softarch.luxurycarrental.ui;
 import ch.unil.softarch.luxurycarrental.client.CarTypeClient;
 import ch.unil.softarch.luxurycarrental.domain.entities.CarType;
 import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
@@ -23,8 +25,11 @@ public class CarTypeBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        loadCarTypes();
+    }
+
+    private void loadCarTypes() {
         try {
-            // Load all car types from backend via REST client
             carTypes = carTypeClient.getAllCarTypes();
             System.out.println("Fetched car types: " + carTypes.size());
         } catch (Exception e) {
@@ -41,18 +46,33 @@ public class CarTypeBean implements Serializable {
      * Navigate to the CarType edit page.
      *
      * @param id ID of the CarType to edit.
-     *           If null → open the page with an empty form (create new).
-     *
-     * @return navigation string to go to edit_car_type.xhtml
+     * @return navigation string to car_type_form.xhtml
      */
     public String goToEdit(UUID id) {
-
         if (id != null) {
-            // Put id in URL so "edit" page can load the CarType
-            return "/pages/admin/car_type_form.xhtml?faces-redirect=true&id=" + id;
+            return "/pages/admin/car_type_form.xhtml?faces-redirect=true&carTypeId=" + id;
         }
-
-        // id is null → open blank form for creating new CarType
         return "/pages/admin/car_type_form.xhtml?faces-redirect=true";
+    }
+
+    /**
+     * Delete a CarType by its ID.
+     *
+     * @param id UUID of the car type to delete
+     */
+    public void deleteCarType(UUID id) {
+        if (id != null) {
+            boolean success = carTypeClient.removeCarType(id);
+            FacesContext context = FacesContext.getCurrentInstance();
+            if (success) {
+                context.addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Deleted successfully", null));
+                // Refresh the list
+                loadCarTypes();
+            } else {
+                context.addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Failed to delete", null));
+            }
+        }
     }
 }

@@ -1,122 +1,129 @@
 package ch.unil.softarch.luxurycarrental.ui;
 
-import jakarta.enterprise.context.SessionScoped;
+import ch.unil.softarch.luxurycarrental.client.CarClient;
+import ch.unil.softarch.luxurycarrental.client.CarTypeClient;
+import ch.unil.softarch.luxurycarrental.domain.entities.Car;
+import ch.unil.softarch.luxurycarrental.domain.entities.CarType;
+import ch.unil.softarch.luxurycarrental.domain.enums.CarStatus;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
+/**
+ * JSF Managed Bean for adding/editing a Car.
+ * Handles form binding, dropdowns, status selection, and submission.
+ */
 @Named("carFormBean")
-@SessionScoped
+@ViewScoped
 public class CarFormBean implements Serializable {
 
-    // ---- Fields matching your JSON ----
-    private String id;
-    private String carTypeId;
-    private String color;
-    private Double dailyRentalPrice;
-    private Double depositAmount;
-    private String vin;
-    private String licensePlate;
-    private String imageUrl;
-    private LocalDate registrationDate;
-    private LocalDate insuranceExpiryDate;
-    private LocalDate lastMaintenanceDate;
-    private String status;
+    private static final long serialVersionUID = 1L;
 
-    // -------------------------------
-    // Load existing car for editing
-    // -------------------------------
-    public String loadCar(String carId) {
-        // TODO load from database/service
-        System.out.println("Loading car: " + carId);
+    /** The car object bound to the form */
+    private Car car;
 
-        // Mock example for demonstration
-        this.id = carId;
-        this.carTypeId = "aaa85d1a-1942-4517-b4b8-f37a2e33a7ad";
-        this.color = "White";
-        this.dailyRentalPrice = 120.0;
-        this.depositAmount = 300.0;
-        this.vin = "VIN123456";
-        this.licensePlate = "VD12345";
-        this.imageUrl = "https://example.com/camry.jpg";
-        this.registrationDate = LocalDate.parse("2025-01-10");
-        this.insuranceExpiryDate = LocalDate.parse("2026-11-02");
-        this.lastMaintenanceDate = LocalDate.parse("2025-09-15");
-        this.status = "AVAILABLE";
+    /** List of available car types for dropdown */
+    private List<CarType> carTypes;
 
-        return "add_or_edit_car.xhtml?faces-redirect=true";
+    /** Dropdown options for status */
+    private List<CarStatus> statuses;
+
+    /** Flag to indicate if editing an existing car */
+    private boolean editing;
+
+    /** Optional URL parameter for editing */
+    private UUID carId;
+
+    private final CarTypeClient carTypeClient = new CarTypeClient();
+    private final CarClient carClient = new CarClient();
+
+    @PostConstruct
+    public void init() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        if (fc.isPostback()) return;
+
+        // Load dropdown options
+        statuses = new ArrayList<>();
+        Collections.addAll(statuses, CarStatus.values());
+
+        try {
+            carTypes = carTypeClient.getAllCarTypes();
+        } catch (Exception e) {
+            carTypes = Collections.emptyList();
+            e.printStackTrace();
+        }
+
+        if (carId != null) {
+            // Editing mode: fetch existing car
+            try {
+                car = carClient.getCar(carId);
+                if (car.getCarType() == null) {
+                    car.setCarType(new CarType());
+                }
+                editing = true;
+            } catch (Exception e) {
+                car = new Car();
+                editing = false;
+                e.printStackTrace();
+            }
+        } else {
+            // New car mode
+            car = new Car();
+            car.setCarType(new CarType());
+            editing = false;
+        }
     }
 
-    // -------------------------------
-    // Create new car
-    // -------------------------------
-    public String newCar() {
-        this.id = UUID.randomUUID().toString(); // new UUID
-        this.carTypeId = null;
-        this.color = null;
-        this.dailyRentalPrice = null;
-        this.depositAmount = null;
-        this.vin = null;
-        this.licensePlate = null;
-        this.imageUrl = null;
-        this.registrationDate = null;
-        this.insuranceExpiryDate = null;
-        this.lastMaintenanceDate = null;
-        this.status = "AVAILABLE";
+    /** Getter/Setter */
+    public Car getCar() { return car; }
+    public void setCar(Car car) { this.car = car; }
 
-        return "add_or_edit_car.xhtml?faces-redirect=true";
-    }
+    public List<CarType> getCarTypes() { return carTypes; }
+    public List<CarStatus> getStatuses() { return statuses; }
 
-    // -------------------------------
-    // Save (create or update)
-    // -------------------------------
+    public boolean isEditing() { return editing; }
+
+    public UUID getCarId() { return carId; }
+    public void setCarId(UUID carId) { this.carId = carId; }
+
+    /**
+     * Save or add a car.
+     * If editing, call update; otherwise add.
+     */
     public String save() {
-        System.out.println("Saving car:");
-        System.out.println("ID = " + id);
-        System.out.println("Car Type ID = " + carTypeId);
-        System.out.println("Color = " + color);
-        System.out.println("Daily Price = " + dailyRentalPrice);
+        FacesContext context = FacesContext.getCurrentInstance();
 
-        // TODO service.saveCar(...)
+        try {
+            if (editing) {
+                carClient.updateCar(car.getId(), car);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Car updated successfully!", null));
+            } else {
+                carClient.addCar(car);
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Car added successfully!", null));
+            }
 
-        return "car_list.xhtml?faces-redirect=true";
+            // Reset form
+            car = new Car();
+            car.setCarType(new CarType());
+            editing = false;
+
+        } catch (Exception e) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Failed to save car", null));
+            e.printStackTrace();
+        }
+
+        // Redirect to car list
+        return "/pages/admin/car.xhtml?faces-redirect=true";
     }
-
-    // Getters and setters ...
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
-    public String getCarTypeId() { return carTypeId; }
-    public void setCarTypeId(String carTypeId) { this.carTypeId = carTypeId; }
-
-    public String getColor() { return color; }
-    public void setColor(String color) { this.color = color; }
-
-    public Double getDailyRentalPrice() { return dailyRentalPrice; }
-    public void setDailyRentalPrice(Double dailyRentalPrice) { this.dailyRentalPrice = dailyRentalPrice; }
-
-    public Double getDepositAmount() { return depositAmount; }
-    public void setDepositAmount(Double depositAmount) { this.depositAmount = depositAmount; }
-
-    public String getVin() { return vin; }
-    public void setVin(String vin) { this.vin = vin; }
-
-    public String getLicensePlate() { return licensePlate; }
-    public void setLicensePlate(String licensePlate) { this.licensePlate = licensePlate; }
-
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-
-    public LocalDate getRegistrationDate() { return registrationDate; }
-    public void setRegistrationDate(LocalDate registrationDate) { this.registrationDate = registrationDate; }
-
-    public LocalDate getInsuranceExpiryDate() { return insuranceExpiryDate; }
-    public void setInsuranceExpiryDate(LocalDate insuranceExpiryDate) { this.insuranceExpiryDate = insuranceExpiryDate; }
-
-    public LocalDate getLastMaintenanceDate() { return lastMaintenanceDate; }
-    public void setLastMaintenanceDate(LocalDate lastMaintenanceDate) { this.lastMaintenanceDate = lastMaintenanceDate; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
 }

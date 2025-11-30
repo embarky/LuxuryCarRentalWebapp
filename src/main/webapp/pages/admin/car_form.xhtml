@@ -2,68 +2,142 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       lang="en">
+
 <h:head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Add Vehicle</title>
-    <h:outputStylesheet name="css/page-style.css"/>
+    <title>Elite Drive - Add Car</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+    <h:outputStylesheet name="css/admin-page.css"/>
 </h:head>
 
-<h:body>
-    <div class="page-container">
-        <div class="content-header">
-            <h1 class="page-title">Add New Vehicle</h1>
-            <p class="page-subtitle">Add a new vehicle to your fleet</p>
-        </div>
+<h:body style="background:#f7f7f7;">
 
-        <div class="content-body">
-            <div class="welcome-message">
-                <h2>Add New Vehicle</h2>
-                <p>Fill in the form to add a new vehicle to your fleet.</p>
+    <div class="container mt-5">
+
+        <h2 class="mb-4 text-center">
+            #{carFormBean.car.id != null ? 'Edit Car' : 'Add New Car'}
+        </h2>
+
+        <h:form id="carForm">
+
+            <!-- Global messages -->
+            <h:messages styleClass="text-danger mb-3" globalOnly="true"/>
+
+            <div class="card shadow p-4">
+
+                <!-- Select CarType -->
+                <div class="mb-3">
+                    <label for="carType" class="form-label">Car Type *</label>
+                    <h:selectOneMenu id="carType" value="#{carFormBean.car.carType}" required="true"
+                                     styleClass="form-select">
+                        <f:selectItem itemLabel="-- Select --" itemValue="#{null}"/>
+                        <f:selectItems value="#{carFormBean.carTypes}" var="ct"
+                                       itemLabel="#{ct.brand} #{ct.model}" itemValue="#{ct}"/>
+                    </h:selectOneMenu>
+                </div>
+
+                <!-- Car Properties -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="color" class="form-label">Color *</label>
+                        <h:inputText id="color" value="#{carFormBean.car.color}" required="true"
+                                     styleClass="form-control"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="licensePlate" class="form-label">License Plate *</label>
+                        <h:inputText id="licensePlate" value="#{carFormBean.car.licensePlate}" required="true"
+                                     styleClass="form-control"/>
+                    </div>
+                </div>
+
+                <!-- Price & Deposit -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="dailyRentalPrice" class="form-label">Daily Rental Price *</label>
+                        <h:inputText id="dailyRentalPrice" value="#{carFormBean.car.dailyRentalPrice}" required="true"
+                                     styleClass="form-control">
+                            <f:convertNumber/>
+                        </h:inputText>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="depositAmount" class="form-label">Deposit Amount *</label>
+                        <h:inputText id="depositAmount" value="#{carFormBean.car.depositAmount}" required="true"
+                                     styleClass="form-control">
+                            <f:convertNumber/>
+                        </h:inputText>
+                    </div>
+                </div>
+
+                <!-- Dates -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="insuranceExpiryDate" class="form-label">Insurance Expiry *</label>
+                        <h:inputText id="insuranceExpiryDate" value="#{carFormBean.car.insuranceExpiryDate}"
+                                     required="true" styleClass="form-control" type="date">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                        </h:inputText>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="lastMaintenanceDate" class="form-label">Last Maintenance *</label>
+                        <h:inputText id="lastMaintenanceDate" value="#{carFormBean.car.lastMaintenanceDate}"
+                                     required="true" styleClass="form-control" type="date">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                        </h:inputText>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="registrationDate" class="form-label">Registration Date *</label>
+                        <h:inputText id="registrationDate" value="#{carFormBean.car.registrationDate}"
+                                     required="true" styleClass="form-control" type="date">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>
+                        </h:inputText>
+                    </div>
+                </div>
+
+                <!-- VIN & Image URL -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="vin" class="form-label">VIN *</label>
+                        <h:inputText id="vin" value="#{carFormBean.car.vin}" required="true"
+                                     styleClass="form-control"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="imageUrl" class="form-label">Image URL</label>
+                        <h:inputText id="imageUrl" value="#{carFormBean.car.imageUrl}" styleClass="form-control"/>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="mb-3">
+                    <label for="status" class="form-label">Status *</label>
+                    <h:selectOneMenu id="status" value="#{carFormBean.car.status}" required="true"
+                                     styleClass="form-select">
+                        <f:selectItem itemLabel="-- Select --" itemValue="#{null}"/>
+                        <f:selectItem itemLabel="Available" itemValue="AVAILABLE"/>
+                        <f:selectItem itemLabel="Unavailable" itemValue="UNAVAILABLE"/>
+                    </h:selectOneMenu>
+                </div>
+
+                <!-- Submit & Cancel Buttons -->
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <h:commandButton value="Save Car" action="#{carFormBean.addCar}"
+                                     styleClass="btn btn-success"/>
+                    <h:commandButton value="Cancel"
+                                     action="/pages/admin/car.xhtml?faces-redirect=true"
+                                     styleClass="btn btn-secondary"
+                                     process="@this"
+                                     immediate="true"/>
+                </div>
+
             </div>
 
-            <!-- Add Vehicle Form -->
-            <h:form id="addVehicleForm">
-                <h:panelGrid columns="2" cellpadding="5" styleClass="vehicle-form-grid">
+        </h:form>
 
-                    <h:outputLabel for="brand" value="Brand:"/>
-                    <h:inputText id="brand" value="#{carBean.brand}" required="true"/>
-
-                    <h:outputLabel for="model" value="Model:"/>
-                    <h:inputText id="model" value="#{carBean.model}" required="true"/>
-
-                    <h:outputLabel for="category" value="Category:"/>
-                    <h:inputText id="category" value="#{carBean.category}"/>
-
-                    <h:outputLabel for="dailyPrice" value="Daily Rental Price:"/>
-                    <h:inputText id="dailyPrice" value="#{carBean.dailyRentalPrice}" required="true"/>
-
-                    <h:outputLabel for="seats" value="Seats:"/>
-                    <h:inputText id="seats" value="#{carBean.seats}" required="true"/>
-
-                    <h:outputLabel for="transmission" value="Transmission:"/>
-                    <h:selectOneMenu id="transmission" value="#{carBean.transmission}">
-                        <f:selectItem itemValue="AUTOMATIC" itemLabel="Automatic"/>
-                        <f:selectItem itemValue="MANUAL" itemLabel="Manual"/>
-                    </h:selectOneMenu>
-
-                    <h:outputLabel for="color" value="Color:"/>
-                    <h:inputText id="color" value="#{carBean.color}"/>
-
-                    <h:outputLabel for="imageUrl" value="Image URL:"/>
-                    <h:inputText id="imageUrl" value="#{carBean.imageUrl}"/>
-
-                </h:panelGrid>
-
-                <br/>
-
-                <h:commandButton value="Add Vehicle"
-                                 action="#{carBean.saveCar}"
-                                 styleClass="btn-submit"/>
-                <h:messages id="messages" autoUpdate="true" showDetail="true"/>
-            </h:form>
-        </div>
     </div>
+
 </h:body>
 </html>

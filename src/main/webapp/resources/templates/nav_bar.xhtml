@@ -6,11 +6,33 @@
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="logo">ELITE DRIVE</div>
+
             <ul class="nav-links">
                 <li><h:link value="Home" outcome="/index.xhtml"/></li>
                 <li><a href="#features">Services</a></li>
                 <li><h:link value="Fleet" outcome="/pages/cars.xhtml" /></li>
-                <li><a href="#lojin">Login</a></li>
+
+                <!-- If user is NOT logged in: show Login -->
+                <li>
+                    <h:panelGroup rendered="#{not customerSessionBean.loggedIn}">
+                        <h:link value="Login" outcome="/pages/login.xhtml"/>
+                    </h:panelGroup>
+                </li>
+
+                <!-- If user IS logged in: show Username + Logout -->
+                <li>
+                    <h:panelGroup rendered="#{customerSessionBean.loggedIn}">
+                        <!-- Display username -->
+                        <span>#{customerSessionBean.customer.username}</span>
+
+                        <!-- Logout with confirmation dialog -->
+                        <h:commandLink
+                                value="(Logout)"
+                                action="#{customerSessionBean.logout}"
+                                onclick="return confirm('Are you sure you want to logout?');" />
+                    </h:panelGroup>
+                </li>
+
             </ul>
         </div>
     </nav>

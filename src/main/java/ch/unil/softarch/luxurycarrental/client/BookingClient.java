@@ -95,8 +95,10 @@ public class BookingClient implements Serializable {
                 .path(bookingId.toString())
                 .path("complete")
                 .request(MediaType.APPLICATION_JSON)
-                .put(Entity.text(""), Response.class);
-        return response.getStatus() == 200;
+                .put(Entity.json("{}"));
+        boolean success = response.getStatus() == 200;
+        response.close();
+        return success;
     }
 
     public boolean cancelBooking(UUID bookingId) {
@@ -104,8 +106,10 @@ public class BookingClient implements Serializable {
                 .path(bookingId.toString())
                 .path("cancel")
                 .request(MediaType.APPLICATION_JSON)
-                .put(Entity.text(""), Response.class);
-        return response.getStatus() == 200;
+                .put(Entity.json("{}"));
+        boolean success = response.getStatus() == 200;
+        response.close();
+        return success;
     }
 
     public Booking rejectBooking(UUID bookingId, String reason) {
@@ -122,8 +126,10 @@ public class BookingClient implements Serializable {
                 .path(bookingId.toString())
                 .path("confirm")
                 .request(MediaType.APPLICATION_JSON)
-                .put(Entity.text(""), Response.class);
-        return response.getStatus() == 200;
+                .put(Entity.json("{}"));
+        boolean success = response.getStatus() == 200;
+        response.close();
+        return success;
     }
 
     // ---------------- Inner class for booking request ----------------

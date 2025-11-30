@@ -9,7 +9,6 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
-
 import java.io.Serializable;
 
 @Named("userLoginBean")
@@ -34,23 +33,28 @@ public class UserLoginBean implements Serializable {
 
     // ===== Customer Login =====
     public String loginCustomer() {
+        FacesContext context = FacesContext.getCurrentInstance();
+
         try {
-            if (customerEmail == null || customerEmail.isEmpty() || customerPassword == null || customerPassword.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null,
+            if (customerEmail == null || customerEmail.isEmpty()
+                    || customerPassword == null || customerPassword.isEmpty()) {
+                context.addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email and Password are required", null));
                 return null;
             }
 
+            // Authenticate customer via REST client
             customer = customerClient.authenticate(customerEmail, customerPassword);
 
-            FacesContext.getCurrentInstance().addMessage(null,
+            context.addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Customer login successful: " + customerEmail, null));
 
+            // Redirect to customer dashboard
             return "CustomerDashboard?faces-redirect=true";
 
         } catch (Exception e) {
             customer = null;
-            FacesContext.getCurrentInstance().addMessage(null,
+            context.addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Customer login failed: " + (e.getMessage() != null ? e.getMessage() : "Unknown error"), null));
             return null;
@@ -59,23 +63,28 @@ public class UserLoginBean implements Serializable {
 
     // ===== Admin Login =====
     public String loginAdmin() {
+        FacesContext context = FacesContext.getCurrentInstance();
+
         try {
-            if (adminEmail == null || adminEmail.isEmpty() || adminPassword == null || adminPassword.isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage(null,
+            if (adminEmail == null || adminEmail.isEmpty()
+                    || adminPassword == null || adminPassword.isEmpty()) {
+                context.addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email and Password are required", null));
                 return null;
             }
 
+            // Authenticate admin via REST client
             admin = adminClient.loginAdmin(adminEmail, adminPassword);
 
-            FacesContext.getCurrentInstance().addMessage(null,
+            context.addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO, "Admin login successful: " + adminEmail, null));
 
+            // Redirect to admin dashboard
             return "AdminDashboard?faces-redirect=true";
 
         } catch (Exception e) {
             admin = null;
-            FacesContext.getCurrentInstance().addMessage(null,
+            context.addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Admin login failed: " + (e.getMessage() != null ? e.getMessage() : "Unknown error"), null));
             return null;

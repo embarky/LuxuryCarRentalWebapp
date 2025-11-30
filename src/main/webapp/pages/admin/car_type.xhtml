@@ -51,7 +51,7 @@
                         <th>Engine</th>
                         <th>Power</th>
                         <th>Seats</th>
-                        <th class="edit-col">Edit</th>
+                        <th class="edit-col">Actions</th>
                     </tr>
                     </thead>
 
@@ -68,6 +68,12 @@
                                     <h:commandLink value="Edit"
                                                    styleClass="btn btn-primary btn-sm"
                                                    action="#{carTypeBean.goToEdit(t.id)}" />
+                                    <!-- Delete Button -->
+                                    <h:commandButton value="Delete"
+                                                     styleClass="btn btn-danger btn-sm"
+                                                     action="#{carTypeBean.deleteCarType(t.id)}"
+                                                     onclick="return confirm('Are you sure you want to delete this car type?');"
+                                                     immediate="true"/>
                                 </h:form>
                             </td>
                         </tr>

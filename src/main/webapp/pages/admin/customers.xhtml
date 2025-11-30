@@ -57,14 +57,15 @@
                             <!-- Right-side fixed actions -->
                             <td class="edit-col">
                                 <h:form style="display:inline-block">
-                                    <h:commandLink value="Edit"
-                                                   styleClass="btn btn-primary btn-sm me-1"
-                                                   action="#{customerBean.goToEdit(c.id)}" />
+                                    <h:commandLink value="Verified Identity: Yes"
+                                                   styleClass="btn btn-success btn-sm me-1"
+                                                   action="#{customerListBean.verifyCustomer(c.id)}"
+                                                   onclick="return confirm('Are you sure you want to verify this customer?');" />
                                 </h:form>
                                 <h:form style="display:inline-block">
                                     <h:commandLink value="Delete"
                                                    styleClass="btn btn-danger btn-sm"
-                                                   action="#{customerBean.deleteCustomer(c.id)}"
+                                                   action="#{customerListBean.deleteCustomer(c.id)}"
                                                    onclick="return confirm('Are you sure you want to delete this customer?');" />
                                 </h:form>
                             </td>
@@ -73,12 +74,18 @@
                         <!-- Hidden detail row -->
                         <tr id="detail#{vs.index}" class="details-row" style="display:none;">
                             <td colspan="5" class="details-cell">
+
                                 <p><strong>Customer ID:</strong> #{c.id}</p>
                                 <p><strong>Full Name:</strong> #{c.firstName} #{c.lastName}</p>
                                 <p><strong>Email:</strong> #{c.email}</p>
                                 <p><strong>Phone:</strong> #{c.phoneNumber}</p>
+                                <p><strong>Driving License No:</strong> #{c.drivingLicenseNumber}</p>
+                                <p><strong>License Expiry:</strong> #{c.drivingLicenseExpiryDate}</p>
+                                <p><strong>Age:</strong> #{c.age}</p>
+                                <p><strong>Verified Identity:</strong> #{c.verifiedIdentity ? 'Yes' : 'No'}</p>
+                                <p><strong>Billing Address:</strong> #{c.billingAddress}</p>
                                 <p><strong>Balance:</strong> CHF #{c.balance}</p>
-                                <!-- You can add more customer-specific details here -->
+
                             </td>
                         </tr>
 
