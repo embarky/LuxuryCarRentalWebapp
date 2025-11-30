@@ -22,7 +22,7 @@ public class CarsBean implements Serializable {
 
     @PostConstruct
     public void init() {
-        carList = carClient.getAllCars();  // REST 获取全部车辆
+        carList = carClient.getAllCars();
     }
 
     public String goToDetails(UUID id) {

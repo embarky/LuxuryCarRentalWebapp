@@ -18,25 +18,15 @@
             <h:form id="carListForm">
 
                 <div class="cars-grid">
-                    <!-- 遍历车辆列表 -->
                     <ui:repeat value="#{carsBean.carList}" var="car">
 
-                        <!-- 使用复合组件显示车辆卡片 -->
                         <ed:car_card_component
                                 carId="#{car.id}"
                                 model="#{car.carType.brand} #{car.carType.model}"
                                 engine="#{car.carType.engine}"
                                 seats="#{car.carType.seats}"
-                                price="#{car.dailyRentalPrice}">
-
-                            <!-- 详情按钮，放在组件内部 -->
-                            <h:panelGroup>
-                                <h:commandLink value="View Details"
-                                               icon="pi pi-search"
-                                               action="#{carsBean.goToDetails(car.id)}"
-                                               styleClass="car-details-btn"/>
-                            </h:panelGroup>
-
+                                price="#{car.dailyRentalPrice}"
+                                imageUrl="#{car.imageUrl}">
                         </ed:car_card_component>
 
                     </ui:repeat>

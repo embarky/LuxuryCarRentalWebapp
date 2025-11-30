@@ -114,7 +114,12 @@
                                 <p><strong>VIN:</strong> #{car.vin}</p>
                                 <p><strong>Deposit Amount:</strong> CHF #{car.depositAmount}</p>
                                 <p><strong>Daily Rental Price:</strong> CHF #{car.dailyRentalPrice}</p>
-                                <p><strong>Image:</strong> <a href="#{car.imageUrl}" target="_blank">View Image</a></p>
+                                <div class="mt-3">
+                                    <img src="#{car.imageUrl}"
+                                         alt="Car Image"
+                                         class="img-fluid rounded"
+                                         style="max-width: 250px;" />
+                                </div>
 
                             </td>
                         </tr>

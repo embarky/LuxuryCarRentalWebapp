@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       lang="en">
 <h:head>
     <meta charset="UTF-8"/>
@@ -20,10 +21,20 @@
         </div>
         <div class="banner-right">
             <div class="admin-info">
-                <div class="admin-avatar">AD</div>
-                <span class="admin-name">Administrator</span>
+                <div class="admin-avatar">
+                    #{fn:substring(adminSessionBean.admin.username, 0, 1)}
+                </div>
+                <span class="admin-name">
+                    #{adminSessionBean.admin.username}
+                </span>
             </div>
-            <h:commandButton value="Logout" action="#{loginBean.logout}" styleClass="logout-btn"/>
+
+            <!-- Logout button -->
+            <h:form>
+                <h:commandButton value="Logout"
+                                 action="#{adminSessionBean.logout}"
+                                 styleClass="logout-btn"/>
+            </h:form>
         </div>
     </div>
 
@@ -59,8 +70,10 @@
             <a href="car.xhtml" class="menu-item" data-page="vehicles"
                onclick="document.getElementById('contentFrame').src='car.xhtml'; return false;">
                 <span class="menu-icon">
-                    <svg viewBox="0 0 24 24" stroke-width="2">
-                        <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v4M10 1v4M14 1v4"/>
+                    <svg viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 13l1.5-4.5h15L21 13v6H3v-6z" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="7.5" cy="19.5" r="1.5"/>
+                        <circle cx="16.5" cy="19.5" r="1.5"/>
                     </svg>
                 </span>
                 <span class="menu-text">Car List</span>
@@ -80,16 +93,6 @@
                     </svg>
                 </span>
                 <span class="menu-text">All Bookings</span>
-            </a>
-            <a href="pending.xhtml" class="menu-item" data-page="pending"
-               onclick="document.getElementById('contentFrame').src='pending.xhtml'; return false;">
-                <span class="menu-icon">
-                    <svg viewBox="0 0 24 24" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                </span>
-                <span class="menu-text">Pending Approval</span>
             </a>
         </div>
 

@@ -29,7 +29,7 @@ public class CarDetailsBean implements Serializable {
         String idStr = params.get("carId");
 
         if (idStr != null) {
-            car = carClient.getCar(UUID.fromString(idStr));  // REST 调用获取车辆详情
+            car = carClient.getCar(UUID.fromString(idStr));
         }
     }
 

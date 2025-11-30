@@ -8,6 +8,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/pages/admin/bookings.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/pages/admin" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/pages/login.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/pages" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/pages/register.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/pages" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/resources/templates/car_card_component.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/resources/templates" />
       </map>
     </option>
   </component>

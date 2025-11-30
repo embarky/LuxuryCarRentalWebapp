@@ -106,28 +106,24 @@ public class AdminClient implements Serializable {
                         new GenericType<Map<String, String>>() {});
     }
 
-    // Login admin
+    /**
+     * Login admin via REST
+     */
     public Admin loginAdmin(String email, String password) {
-        // Prepare request body
         Map<String, String> requestBody = Map.of(
                 "email", email,
                 "password", password
         );
 
-        // Send POST request
         Response response = client.target(BASE_URL + "/login")
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(requestBody));
 
-        // Check response
         if (response.getStatus() == 200) {
-            // Login successful, return Admin
             return response.readEntity(Admin.class);
         } else {
-            // Login failed, print status and response body
-            System.out.println(">>> Status: " + response.getStatus());
-            String body = response.readEntity(String.class);
-            System.out.println(">>> Body: " + body);
+            System.out.println("Login failed: " + response.getStatus());
+            System.out.println(response.readEntity(String.class));
             return null;
         }
     }

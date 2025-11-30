@@ -10,61 +10,77 @@
 </h:head>
 
 <h:body>
-    <h:form id="loginForm">
 
-        <!-- Global Messages -->
-        <p:messages id="globalMessages" autoUpdate="true" closable="true" showDetail="true" />
+    <!-- Global messages at the top -->
+    <p:messages id="globalMessages" autoUpdate="true" closable="true" showDetail="true" />
 
-        <h2>User Login</h2>
+    <h2>User Login</h2>
 
-        <p:tabView dynamic="false" cache="false">
+    <p:tabView dynamic="false" cache="false">
 
-            <!-- Customer Login -->
-            <p:tab title="Customer Login">
+        <!-- Customer Login -->
+        <p:tab title="Customer Login">
+            <h:form id="customerForm">
+
                 <p:panelGrid columns="2" cellpadding="5">
-
                     <h:outputLabel for="customerEmail" value="Email:"/>
-                    <h:inputText id="customerEmail" value="#{userLoginBean.customerEmail}" required="true"
-                                 requiredMessage="Email is required"/>
+                    <h:inputText id="customerEmail" value="#{customerSessionBean.email}" required="true"
+                                 requiredMessage="Customer Email is required"/>
 
                     <h:outputLabel for="customerPassword" value="Password:"/>
-                    <h:inputSecret id="customerPassword" value="#{userLoginBean.customerPassword}" required="true"
-                                   requiredMessage="Password is required"/>
-
+                    <h:inputSecret id="customerPassword" value="#{customerSessionBean.password}" required="true"
+                                   requiredMessage="Customer Password is required"/>
                 </p:panelGrid>
 
                 <p:commandButton value="Login as Customer"
-                                 action="#{userLoginBean.loginCustomer}"
-                                 update="loginForm:globalMessages"
-                                 process="customerEmail customerPassword"
+                                 action="#{customerSessionBean.login}"
+                                 process="@form"
+                                 update="globalMessages"
                                  icon="pi pi-sign-in"
                                  ajax="true" />
-            </p:tab>
+                <!-- Extra links: Sign up & Forgot password -->
+                <p:separator />
 
-            <!-- Admin Login -->
-            <p:tab title="Admin Login">
+                <h:panelGroup layout="block" style="text-align:center;">
+                    <h:link value="Create an Account" outcome="/pages/register.xhtml"/>
+                    <br/>
+                    <h:link value="Forgot Password?" outcome="/pages/reset-password.xhtml"/>
+                </h:panelGroup>
+            </h:form>
+        </p:tab>
+
+        <!-- Admin Login -->
+        <p:tab title="Admin Login">
+            <h:form id="adminForm">
+
                 <p:panelGrid columns="2" cellpadding="5">
-
                     <h:outputLabel for="adminEmail" value="Email:"/>
-                    <h:inputText id="adminEmail" value="#{userLoginBean.adminEmail}" required="true"
-                                 requiredMessage="Email is required"/>
+                    <h:inputText id="adminEmail" value="#{adminSessionBean.email}" required="true"
+                                 requiredMessage="Admin Email is required"/>
 
                     <h:outputLabel for="adminPassword" value="Password:"/>
-                    <h:inputSecret id="adminPassword" value="#{userLoginBean.adminPassword}" required="true"
-                                   requiredMessage="Password is required"/>
-
+                    <h:inputSecret id="adminPassword" value="#{adminSessionBean.password}" required="true"
+                                   requiredMessage="Admin Password is required"/>
                 </p:panelGrid>
 
                 <p:commandButton value="Login as Admin"
-                                 action="#{userLoginBean.loginAdmin}"
-                                 update="loginForm:globalMessages"
-                                 process="adminEmail adminPassword"
+                                 action="#{adminSessionBean.login}"
+                                 process="@form"
+                                 update="globalMessages"
                                  icon="pi pi-sign-in"
                                  ajax="true" />
-            </p:tab>
+                <!-- Extra links: Sign up & Forgot password -->
+                <p:separator />
 
-        </p:tabView>
+                <h:panelGroup layout="block" style="text-align:center;">
+                    <h:link value="Create an Account" outcome="/pages/register.xhtml"/>
+                    <br/>
+                    <h:link value="Forgot Password?" outcome="/pages/reset-password.xhtml"/>
+                </h:panelGroup>
 
-    </h:form>
+            </h:form>
+        </p:tab>
+
+    </p:tabView>
 </h:body>
 </html>

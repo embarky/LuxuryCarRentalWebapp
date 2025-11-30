@@ -1,4 +1,3 @@
-<!-- car_details.xhtml -->
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
@@ -6,47 +5,87 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 template="/resources/templates/master_template.xhtml">
 
+    <!-- Page title -->
     <ui:define name="title">
         Car Details
     </ui:define>
 
+    <!-- Main content -->
     <ui:define name="content">
 
         <h:form id="detailsForm">
-            <p:panel header="Car Details">
 
-                <h:panelGrid columns="2" cellpadding="10">
+            <!-- Main card container -->
+            <p:panel header="Car Details" styleClass="shadow p-4 mb-4" toggleable="true">
 
-                    <h:graphicImage value="#{carDetailsBean.car.imageUrl}"
-                                    style="width:400px; height:250px; object-fit:cover"/>
+                <!-- Two-column grid: Image | Basic Info -->
+                <h:panelGrid columns="2" columnClasses="image-col,info-col" cellpadding="15">
 
-                    <h:panelGrid columns="1" cellpadding="4">
+                    <!-- Car Image -->
+                    <p:panel styleClass="car-image-panel">
+                        <h:graphicImage value="#{carDetailsBean.car.imageUrl}"
+                                        style="width:100%; height:auto; border-radius:8px; object-fit:cover"/>
+                    </p:panel>
+
+                    <!-- Car Basic Information -->
+                    <p:panel styleClass="car-info-panel p-3">
+
                         <h2>#{carDetailsBean.car.carType.brand} #{carDetailsBean.car.carType.model}</h2>
-                        <p>Category: #{carDetailsBean.car.carType.category}</p>
-                        <p>Engine: #{carDetailsBean.car.carType.engine}</p>
-                        <p>Power: #{carDetailsBean.car.carType.power} HP</p>
-                        <p>Seats: #{carDetailsBean.car.carType.seats}</p>
-                        <p>Drive Type: #{carDetailsBean.car.carType.driveType}</p>
-                        <p>Color: #{carDetailsBean.car.color}</p>
-                        <p>Daily Price: #{carDetailsBean.car.dailyRentalPrice} CHF</p>
-                        <p>Deposit: #{carDetailsBean.car.depositAmount} CHF</p>
-                        <p>Status: #{carDetailsBean.car.status}</p>
-                    </h:panelGrid>
+                        <p><strong>Category:</strong> #{carDetailsBean.car.carType.category}</p>
+                        <p><strong>Description:</strong> #{carDetailsBean.car.carType.description}</p>
+                        <p><strong>Engine:</strong> #{carDetailsBean.car.carType.engine}</p>
+                        <p><strong>Power:</strong> #{carDetailsBean.car.carType.power} HP</p>
+                        <p><strong>Seats:</strong> #{carDetailsBean.car.carType.seats}</p>
+                        <p><strong>Drive Type:</strong> #{carDetailsBean.car.carType.driveType}</p>
+                        <p><strong>Transmission:</strong> #{carDetailsBean.car.carType.transmission}</p>
+                        <p><strong>Acceleration (0-100 km/h):</strong> #{carDetailsBean.car.carType.acceleration} sec</p>
+                        <p><strong>Max Speed:</strong> #{carDetailsBean.car.carType.maxSpeed} km/h</p>
+                        <p><strong>Weight:</strong> #{carDetailsBean.car.carType.weight} kg</p>
+                        <p><strong>Color:</strong> #{carDetailsBean.car.color}</p>
+                        <p><strong>Status:</strong> #{carDetailsBean.car.status}</p>
+
+                        <!-- Pricing info -->
+                        <div class="pricing-box mt-3 p-3 rounded" style="background:#f0f8ff;">
+                            <p><strong>Daily Price:</strong> CHF #{carDetailsBean.car.dailyRentalPrice}</p>
+                            <p><strong>Deposit:</strong> CHF #{carDetailsBean.car.depositAmount}</p>
+                        </div>
+
+                        <!-- VIN and registration -->
+                        <p class="mt-2"><strong>VIN:</strong> #{carDetailsBean.car.vin}</p>
+                        <p><strong>License Plate:</strong> #{carDetailsBean.car.licensePlate}</p>
+                        <p><strong>Insurance Expiry:</strong> #{carDetailsBean.car.insuranceExpiryDate}</p>
+                        <p><strong>Last Maintenance:</strong> #{carDetailsBean.car.lastMaintenanceDate}</p>
+                        <p><strong>Registration Date:</strong> #{carDetailsBean.car.registrationDate}</p>
+
+                    </p:panel>
 
                 </h:panelGrid>
 
-                <h3>Car Features</h3>
-                <ul>
-                    <ui:repeat value="#{carDetailsBean.car.carType.features}" var="f">
-                        <li>#{f}</li>
-                    </ui:repeat>
-                </ul>
+                <!-- Car Features -->
+                <p:panel header="Features" styleClass="mt-4">
+                    <ul>
+                        <ui:repeat value="#{carDetailsBean.car.carType.features}" var="f">
+                            <li>#{f}</li>
+                        </ui:repeat>
+                    </ul>
+                </p:panel>
 
-                <p:commandButton value="Back to Cars"
-                                 icon="pi pi-arrow-left"
-                                 onclick="window.location='cars.xhtml'; return false;"/>
+                <!-- Action buttons -->
+                <div class="mt-4 d-flex justify-content-between">
+                    <p:commandButton value="Back to Cars"
+                                     icon="pi pi-arrow-left"
+                                     styleClass="p-button-secondary"
+                                     onclick="window.location='cars.xhtml'; return false;"/>
+                    <p:commandButton value="Book This Car"
+                                     icon="pi pi-check"
+                                     styleClass="p-button-success"
+                                     action="#{bookingBean.startBooking(carDetailsBean.car.id)}"/>
+                </div>
+
             </p:panel>
+
         </h:form>
 
     </ui:define>
+
 </ui:composition>

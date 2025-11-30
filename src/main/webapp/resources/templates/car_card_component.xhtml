@@ -4,6 +4,7 @@
         xmlns:cc="http://xmlns.jcp.org/jsf/composite"
         xmlns:h="http://xmlns.jcp.org/jsf/html">
 
+    <!-- Component API -->
     <cc:interface>
         <cc:attribute name="model" required="true" />
         <cc:attribute name="engine" required="true" />
@@ -11,33 +12,47 @@
         <cc:attribute name="price" required="true" />
         <cc:attribute name="badge" />
         <cc:attribute name="carId" required="true" />
+        <cc:attribute name="imageUrl" required="true" />
     </cc:interface>
 
+    <!-- Implementation -->
     <cc:implementation>
+
         <div class="car-card">
-            <div class="car-image" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
+
+            <div class="car-image"
+                 style="background-image: url('#{cc.attrs.imageUrl}');
+                        background-size: cover;
+                        background-position:center;
+                        height: 240px;">
                 <ui:fragment rendered="#{cc.attrs.badge}">
                     <div class="car-badge">#{cc.attrs.badge}</div>
                 </ui:fragment>
             </div>
+
             <div class="car-info">
                 <h3>#{cc.attrs.model}</h3>
+
                 <div class="car-specs">
                     <span>⚡ #{cc.attrs.engine}</span>
-                    <span>🪑 #{cc.attrs.seats} Seater</span>
+                    <span>🪑 #{cc.attrs.seats} Seats</span>
                     <span>⚙️ Auto</span>
                 </div>
+
                 <div class="car-price">
                     <div>
-                        <div class="price">¥#{cc.attrs.price}</div>
+                        <div class="price">CHF#{cc.attrs.price}</div>
                         <div class="price-label">Per Day</div>
                     </div>
+
                     <h:commandButton value="Book"
                                      action="#{carsBean.goToDetails(cc.attrs.carId)}"
-                                     ajax="false"
-                                     styleClass="book-btn"/>
+                                     styleClass="book-btn"
+                                     ajax="false"/>
                 </div>
             </div>
         </div>
+
     </cc:implementation>
+
 </ui:composition>
