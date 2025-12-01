@@ -28,7 +28,7 @@ public class CarDetailsBean implements Serializable {
     private BookingClient bookingClient;
 
     @Inject
-    private CustomerSessionBean customerSessionBean; // 注入 session bean
+    private CustomerSessionBean customerSessionBean;
 
     private Car car;
     private LocalDate startDate;

@@ -10,20 +10,16 @@
     <ui:define name="content">
         <h:form id="detailsForm">
 
-            <!-- 全局消息 -->
             <p:growl id="growl" showDetail="true" life="5000"/>
 
-            <!-- 车辆详情面板 -->
             <p:panel header="Car Details" styleClass="shadow p-4 mb-4">
                 <h:panelGrid columns="2" columnClasses="image-col,info-col" cellpadding="15">
 
-                    <!-- 图片 -->
                     <p:panel styleClass="car-image-panel">
                         <h:graphicImage value="#{carDetailsBean.car.imageUrl}"
                                         style="width:100%; height:auto; border-radius:8px; object-fit:cover"/>
                     </p:panel>
 
-                    <!-- 车辆信息 -->
                     <p:panel styleClass="car-info-panel p-3">
                         <h2>#{carDetailsBean.car.carType.brand} #{carDetailsBean.car.carType.model}</h2>
                         <p><strong>Category:</strong> #{carDetailsBean.car.carType.category}</p>
@@ -38,7 +34,6 @@
                     </p:panel>
                 </h:panelGrid>
 
-                <!-- 车辆特性 -->
                 <p:panel header="Features" styleClass="mt-4">
                     <ul>
                         <ui:repeat value="#{carDetailsBean.car.carType.features}" var="f">
@@ -48,7 +43,6 @@
                 </p:panel>
             </p:panel>
 
-            <!-- 预订面板 -->
             <p:panel header="Book This Car" styleClass="shadow p-4 mt-4">
                 <p:calendar id="startDate" value="#{carDetailsBean.startDate}" pattern="yyyy-MM-dd"
                             label="Start Date" showIcon="true" required="true"/>
