@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       lang="en">
 
@@ -14,9 +15,10 @@
 
 <h:body style="background:#f7f7f7;">
 
+    <p:messages id="globalMessages" autoUpdate="true" closable="true" showDetail="true" />
     <!-- 获取 URL 参数 -->
     <f:metadata>
-        <f:viewParam name="carTypeId" value="#{carTypeFormBean.carTypeId}"/>
+        <f:viewParam name="carTypeId" value="#{carTypeFormBean.carTypeId}" converter="#{carTypeFormBean.uuidConverter}"/>
     </f:metadata>
 
     <div class="container mt-5">
