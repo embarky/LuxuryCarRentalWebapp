@@ -81,13 +81,13 @@ public class AdminClient implements Serializable {
     /**
      * Send password reset code to admin via email
      */
-    public Map<String, String> sendAdminResetCode(String email) {
+    public void sendAdminResetCode(String email) {
         Map<String, String> body = Map.of("email", email);
-        return adminTarget
+
+        Response response = client.target(BASE_URL)
                 .path("password-reset-code")
                 .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(body, MediaType.APPLICATION_JSON),
-                        new GenericType<Map<String, String>>() {});
+                .post(Entity.entity(body, MediaType.APPLICATION_JSON));
     }
 
     /**

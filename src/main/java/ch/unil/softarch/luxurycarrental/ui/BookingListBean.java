@@ -46,12 +46,6 @@ public class BookingListBean implements Serializable {
         loadBookings();
     }
 
-    // ===== CANCEL BOOKING =====
-    public void cancelBooking(UUID bookingId) {
-        boolean success = bookingClient.cancelBooking(bookingId);
-        loadBookings();
-    }
-
     // ===== REJECT BOOKING =====
     public void rejectBooking(UUID bookingId, String reason) {
         bookingClient.rejectBooking(bookingId, reason);

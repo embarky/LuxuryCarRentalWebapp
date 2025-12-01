@@ -37,13 +37,11 @@ public class ResetBean implements Serializable {
     //       ADMIN ACTIONS
     // ==========================
     public void sendAdminResetCode() {
-        try {
-            Map<String, String> result = adminClient.sendAdminResetCode(adminEmail);
-            addInfo(result.getOrDefault("message", "Admin verification code sent successfully."));
-        } catch (Exception e) {
-            addError("Failed to send admin verification code: " + e.getMessage());
-            e.printStackTrace();
-        }
+        adminClient.sendAdminResetCode(adminEmail);
+
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO,
+                        "Verification code sent to " + adminEmail, null));
     }
 
     public void resetAdminPassword() {

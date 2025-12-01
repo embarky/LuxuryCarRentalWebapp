@@ -49,6 +49,7 @@ public class RegisterBean implements Serializable {
     // ========== REGISTER ADMIN ==========
     public String registerAdmin() {
         try {
+            // 创建 Admin 对象
             Admin admin = new Admin();
             admin.setUsername(adminUsername);
             admin.setPassword(adminPassword);
@@ -57,14 +58,24 @@ public class RegisterBean implements Serializable {
 
             Admin result = adminClient.addAdmin(admin);
 
-            addInfo("Admin registered: " + result.getUsername());
-            return null; // stay on same page
+            if (result != null) {
+                addInfo("Admin registered successfully: " + result.getUsername());
+            } else {
+                addInfo("Admin registered successfully: " + admin.getUsername() + " (server returned null)");
+            }
+
+            adminUsername = "";
+            adminPassword = "";
+            adminName = "";
+            adminEmail = "";
+
+            return null;
 
         } catch (Exception e) {
             addError("Admin registration failed: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
-
     }
 
     // ========== REGISTER CUSTOMER ==========

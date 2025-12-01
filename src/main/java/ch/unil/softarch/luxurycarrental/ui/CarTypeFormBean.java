@@ -25,52 +25,53 @@ public class CarTypeFormBean implements Serializable {
     @Inject
     private CarTypeClient carTypeClient;
 
-    private CarType carType;           // Current car type object
-    private boolean editing;           // True if editing an existing car type
-    private String featuresAsString;   // Comma-separated features for UI
+    private CarType carType;           // 当前表单对象
+    private boolean editing;           // 是否编辑模式
+    private String featuresAsString;   // 用于输入框的字符串
 
-    private UUID carTypeId;            // URL parameter
+    private UUID carTypeId;            // URL 参数
 
-    private List<DriveType> driveTypes;        // Dropdown options
-    private List<Transmission> transmissions;  // Dropdown options
+    private List<DriveType> driveTypes;        // 下拉选项
+    private List<Transmission> transmissions;  // 下拉选项
 
-    /**
-     * Initialize the bean.
-     * Only initialize if this is NOT a postback (avoid overwriting form data).
-     */
+    // --- 初始化 ---
     @PostConstruct
     public void init() {
         FacesContext fc = FacesContext.getCurrentInstance();
         if (fc.isPostback()) return;
 
-        // Initialize dropdown lists
+        // 下拉选项
         driveTypes = Arrays.asList(DriveType.values());
         transmissions = Arrays.asList(Transmission.values());
 
-        if (carTypeId != null) {
-            // Editing mode: fetch existing car type
-            carType = carTypeClient.getCarType(carTypeId);
-            if (carType.getFeatures() == null) carType.setFeatures(new ArrayList<>());
-            featuresAsString = String.join(", ", carType.getFeatures());
-            editing = true;
+        // 尝试从 URL 读取 carTypeId
+        String idParam = fc.getExternalContext().getRequestParameterMap().get("carTypeId");
+        if (idParam != null && !idParam.isBlank()) {
+            try {
+                carTypeId = UUID.fromString(idParam);
+                carType = carTypeClient.getCarType(carTypeId);
+                if (carType.getFeatures() == null) carType.setFeatures(new ArrayList<>());
+                featuresAsString = String.join(", ", carType.getFeatures());
+                editing = true;
+            } catch (Exception e) {
+                // 无效 UUID 或无法加载 → 新增模式
+                setupNewCarType();
+            }
         } else {
-            // New car type mode
-            carType = new CarType();
-            carType.setFeatures(new ArrayList<>());
-            featuresAsString = "";
-            // Set default values to avoid null
-            carType.setDriveType(DriveType.FRONT_WHEEL_DRIVE);
-            carType.setTransmission(Transmission.MANUAL);
-            editing = false;
+            setupNewCarType();
         }
     }
 
-    /**
-     * Save the car type.
-     * If editing, call update; if new, call add.
-     */
+    private void setupNewCarType() {
+        carType = new CarType();
+        carType.setFeatures(new ArrayList<>());
+        featuresAsString = "";
+        carType.setDriveType(DriveType.FRONT_WHEEL_DRIVE);
+        carType.setTransmission(Transmission.MANUAL);
+        editing = false;
+    }
+
     public String save() {
-        // Convert comma-separated string to list
         if (featuresAsString != null && !featuresAsString.isBlank()) {
             carType.setFeatures(Arrays.asList(featuresAsString.split("\\s*,\\s*")));
         } else {
@@ -83,11 +84,10 @@ public class CarTypeFormBean implements Serializable {
             carTypeClient.addCarType(carType);
         }
 
-        // Redirect back to car type list page
         return "/pages/admin/car_type.xhtml?faces-redirect=true";
     }
 
-    // --- Getters and setters ---
+    // --- Getter/Setter ---
     public CarType getCarType() { return carType; }
     public void setCarType(CarType carType) { this.carType = carType; }
 

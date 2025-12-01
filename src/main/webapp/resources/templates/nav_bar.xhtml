@@ -24,26 +24,29 @@
                 <!-- If logged in → show username with dropdown menu -->
                 <li>
                     <h:form style="display:inline;">
-                        <p:menuButton value="#{customerSessionBean.customer.firstName}" icon="pi pi-user"
-                                      styleClass="black-gold-btn">
+                        <p:menuButton value="#{customerSessionBean.customer.firstName}"
+                                      icon="pi pi-user"
+                                      styleClass="btn btn-primary">
+
                             <!-- Orders page -->
                             <p:menuitem value="Orders"
                                         icon="pi pi-shopping-cart"
-                                        outcome="/pages/orders.xhtml">
-                                <f:metadata>
-                                    <f:viewParam name="customerId" value="#{customerSessionBean.customer.id}" />
-                                </f:metadata>
-                            </p:menuitem>
+                                        outcome="/pages/orders.xhtml"/>
 
-                            <!-- Logout action -->
+                            <!-- Logout action with PrimeFaces confirm -->
                             <p:menuitem value="Logout"
                                         icon="pi pi-sign-out"
                                         action="#{customerSessionBean.logout}"
                                         ajax="false"
-                                        onclick="return confirm('Are you sure you want to logout?');" />
+                                        styleClass="logout-button">
+                            </p:menuitem>
+
                         </p:menuButton>
                     </h:form>
                 </li>
+
+                <!-- Global confirm dialog -->
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"/>
 
             </ul>
         </div>

@@ -60,9 +60,9 @@
 
                                     <!-- Delete button -->
                                     <h:form>
-                                        <h:commandLink value="Cancel" styleClass="btn btn-danger btn-sm"
-                                                       action="#{orderBean.cancelOrder}"
-                                                       onclick="return confirm('Are you sure you want to delete this booking?');"/>
+                                        <h:commandLink value="Cancel" styleClass="btn btn-success btn-sm"
+                                                       action="#{orderBean.cancelBooking(b.bookingId)}"
+                                                       onclick="return confirm('Are you sure you want to cancel this booking?');"/>
                                     </h:form>
 
                                 </div>

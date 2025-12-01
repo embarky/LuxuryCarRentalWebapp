@@ -3,7 +3,6 @@ package ch.unil.softarch.luxurycarrental.ui;
 import ch.unil.softarch.luxurycarrental.client.BookingClient;
 import ch.unil.softarch.luxurycarrental.domain.entities.Booking;
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -12,47 +11,32 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.Map;
 
 @Named("orderBean")
 @ViewScoped
 public class OrderBean implements Serializable {
 
-    private List<Booking> orders;  // list of orders for the current user
-    private final BookingClient bookingClient = new BookingClient();
+    private List<Booking> orders = Collections.emptyList();  // current user's bookings
+
+    @Inject
+    private BookingClient bookingClient;  // injected client
 
     @Inject
     private CustomerSessionBean customerSessionBean; // logged-in customer session
 
-    @Inject
-    private FacesContext facesContext; // for reading request parameters
-
     @PostConstruct
     public void init() {
-        // First, try to read customerId from request parameter
-        Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap();
-        String customerIdParam = params.get("customerId");
-
-        if (customerIdParam != null && !customerIdParam.isEmpty()) {
-            try {
-                UUID customerId = UUID.fromString(customerIdParam);
-                loadOrders(customerId);
-                return;
-            } catch (IllegalArgumentException e) {
-                // invalid UUID, fallback to session customer
-            }
-        }
-
-        // fallback to currently logged-in customer
+        // Load orders for logged-in customer
         if (customerSessionBean.getCustomer() != null) {
-            loadOrders(customerSessionBean.getCustomer().getId());
+            UUID customerId = customerSessionBean.getCustomer().getId();
+            loadOrders(customerId);
         } else {
             orders = Collections.emptyList();
         }
     }
 
     /**
-     * Load orders for a specific customer
+     * Load bookings for a specific customer
      */
     private void loadOrders(UUID customerId) {
         try {
@@ -64,24 +48,22 @@ public class OrderBean implements Serializable {
     }
 
     /**
-     * Cancel a specific order
+     * Cancel a specific booking
      */
-    public void cancelOrder(UUID bookingId) {
+    // ===== CANCEL BOOKING =====
+    public void cancelBooking(UUID bookingId) {
+        boolean success = bookingClient.cancelBooking(bookingId);
+        loadBookings();
+    }
+    private void loadBookings() {
         try {
-            bookingClient.cancelBooking(bookingId);
+            orders = bookingClient.getAllBookings();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // reload orders after action
-            if (customerSessionBean.getCustomer() != null) {
-                loadOrders(customerSessionBean.getCustomer().getId());
-            }
+            orders = Collections.emptyList();
         }
     }
 
-    /**
-     * Getter for JSF page
-     */
     public List<Booking> getOrders() {
         return orders;
     }

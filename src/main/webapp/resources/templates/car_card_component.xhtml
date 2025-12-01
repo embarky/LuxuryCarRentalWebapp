@@ -45,10 +45,9 @@
                         <div class="price-label">Per Day</div>
                     </div>
 
-                    <h:commandButton value="Book"
-                                     action="#{carsBean.goToDetails(cc.attrs.carId)}"
-                                     styleClass="book-btn"
-                                     ajax="false"/>
+                    <h:outputLink value="#{request.contextPath}/pages/cars_details.xhtml?carId=#{cc.attrs.carId}" styleClass="book-btn">
+                        Book
+                    </h:outputLink>
                 </div>
             </div>
         </div>
